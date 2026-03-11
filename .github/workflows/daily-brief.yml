@@ -1,0 +1,55 @@
+name: Daily Market Brief — 19h Panama
+
+on:
+  schedule:
+    # 7pm Panama (UTC-5) = 00:00 UTC the next day
+    # Runs Mon–Fri Panama evenings (Tue–Sat 00:00 UTC)
+    - cron: '0 0 * * 2-6'
+  workflow_dispatch:  # Allows manual trigger from GitHub UI
+
+permissions:
+  contents: write
+
+jobs:
+  generate-and-send:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          pip install anthropic reportlab requests yfinance
+
+      - name: Create data directory
+        run: mkdir -p data
+
+      - name: Generate report and send email
+        env:
+          ANTHROPIC_API_KEY:   ${{ secrets.ANTHROPIC_API_KEY }}
+          ANTHROPIC_MODEL:     ${{ secrets.ANTHROPIC_MODEL }}
+          GMAIL_REFRESH_TOKEN: ${{ secrets.GMAIL_REFRESH_TOKEN }}
+          GMAIL_CLIENT_ID:     ${{ secrets.GMAIL_CLIENT_ID }}
+          GMAIL_CLIENT_SECRET: ${{ secrets.GMAIL_CLIENT_SECRET }}
+          EMAIL_FROM:          ${{ secrets.EMAIL_FROM }}
+          EMAIL_TO:            ${{ secrets.EMAIL_TO }}
+          FRED_API_KEY:        ${{ secrets.FRED_API_KEY }}
+          FINNHUB_API_KEY:     ${{ secrets.FINNHUB_API_KEY }}
+        run: python scripts/daily_generate_and_send.py
+
+      - name: Commit latest daily report JSON
+        run: |
+          git config user.name "MarketBrief Bot"
+          git config user.email "actions@github.com"
+          git add data/latest-daily-report.json
+          git diff --staged --quiet || git commit -m "chore: daily report $(date +'%Y-%m-%d')"
+          git push
+
+      - name: Done
+        run: echo "✅ Daily Market Brief généré, envoyé et archivé !"
