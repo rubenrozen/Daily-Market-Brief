@@ -15,6 +15,7 @@ from pathlib import Path
 
 import anthropic
 import yfinance as yf
+import pandas as pd
 
 from reportlab.lib.pagesizes import A4
 from reportlab.lib import colors
@@ -70,18 +71,28 @@ def fetch_gmail_emails(access_token: str) -> list[dict]:
     since_ts = int((NOW - timedelta(hours=24)).timestamp())
     query = f"label:Daily-Market-Watch after:{since_ts}"
 
-    # List message IDs
-    params = {"q": query, "maxResults": 30}
-    r = requests.get(f"{base}/messages", headers=headers, params=params)
-    if r.status_code != 200:
-        print(f"  ⚠️ Gmail list failed: {r.text}")
-        return []
+    # List ALL message IDs — no maxResults cap, paginate if needed
+    all_message_ids = []
+    page_token = None
+    while True:
+        params = {"q": query, "maxResults": 500}
+        if page_token:
+            params["pageToken"] = page_token
+        r = requests.get(f"{base}/messages", headers=headers, params=params)
+        if r.status_code != 200:
+            print(f"  ⚠️ Gmail list failed: {r.text}")
+            break
+        page_data = r.json()
+        all_message_ids.extend([m["id"] for m in page_data.get("messages", [])])
+        page_token = page_data.get("nextPageToken")
+        if not page_token:
+            break
 
-    message_ids = [m["id"] for m in r.json().get("messages", [])]
+    message_ids = all_message_ids
     print(f"  → {len(message_ids)} email(s) trouvé(s) dans les dernières 24h")
 
     emails = []
-    for mid in message_ids[:15]:  # Max 15 emails
+    for mid in message_ids:  # ALL emails, no cap
         try:
             r2 = requests.get(f"{base}/messages/{mid}", headers=headers,
                               params={"format": "full"})
@@ -95,16 +106,18 @@ def fetch_gmail_emails(access_token: str) -> list[dict]:
             sender  = hdrs.get("From", "unknown")
             date    = hdrs.get("Date", "")
 
-            # Extract body text
+            # Extract body text — 6000 chars per email to preserve content
             body = _extract_body(msg.get("payload", {}))
             if body:
                 emails.append({
                     "subject": subject,
                     "from": sender,
                     "date": date,
-                    "body": body[:3000]  # Truncate to avoid token explosion
+                    "body": body[:6000]
                 })
-                print(f"  ✉️  {subject[:60]} — {sender[:40]}")
+                print(f"  ✉️  {subject[:70]} — {sender[:50]}")
+        except Exception as e:
+            print(f"  ⚠️ Error reading message {mid}: {e}")
         except Exception as e:
             print(f"  ⚠️ Error reading message {mid}: {e}")
 
@@ -139,116 +152,198 @@ def _extract_body(payload: dict) -> str:
 #  DONNÉES MARCHÉ — yfinance (gratuit) + FRED
 # ══════════════════════════════════════════════════════════════════════════════
 def fetch_yfinance_data() -> dict:
-    """Fetch real-time market data using yfinance (free, no API key)."""
+    """Fetch real-time market data using yfinance.
+    Computes: daily change, weekly change (5 trading days), YTD change.
+    All values are Python-calculated — Claude must NOT recompute or estimate them.
+    """
     print("  [yfinance] Fetching market data...")
     data = {}
+    year_start = f"{NOW.year}-01-01"
 
-    # ── Major Indices
-    indices = {
-        "S&P 500": "^GSPC", "NASDAQ 100": "^NDX", "Dow Jones": "^DJI",
-        "Russell 2000": "^RUT", "VIX": "^VIX",
-        "CAC 40": "^FCHI", "DAX": "^GDAXI", "FTSE 100": "^FTSE",
-        "EuroStoxx 50": "^STOXX50E", "Nikkei 225": "^N225",
-        "Hang Seng": "^HSI", "Shanghai": "000001.SS"
-    }
-    idx_data = {}
-    for name, ticker in indices.items():
+    # ── Helper: safe pct change
+    def pct(new, old):
         try:
-            t = yf.Ticker(ticker)
-            info = t.fast_info
-            price  = round(info.last_price, 2) if info.last_price else None
-            prev   = round(info.previous_close, 2) if info.previous_close else None
-            change = round(((price - prev) / prev) * 100, 2) if price and prev else None
-            if price:
-                idx_data[name] = {"price": price, "prev_close": prev, "change_pct": change}
-        except Exception as e:
-            print(f"    ⚠️ {name}: {e}")
-    data["indices"] = idx_data
+            if new and old and old != 0:
+                return round(((new - old) / abs(old)) * 100, 2)
+        except Exception:
+            pass
+        return None
 
-    # ── FX Rates
+    # ── Helper: fetch price + daily change via fast_info
+    def quick_price(ticker, decimals=2):
+        try:
+            info = yf.Ticker(ticker).fast_info
+            price = round(float(info.last_price), decimals) if info.last_price else None
+            prev  = round(float(info.previous_close), decimals) if info.previous_close else None
+            return price, prev, pct(price, prev)
+        except Exception:
+            return None, None, None
+
+    # ══ INDICES — daily + weekly + YTD ════════════════════════════════════════
+    index_tickers = {
+        "S&P 500":      "^GSPC",
+        "NASDAQ 100":   "^NDX",
+        "Dow Jones":    "^DJI",
+        "Russell 2000": "^RUT",
+        "VIX":          "^VIX",
+        "CAC 40":       "^FCHI",
+        "DAX":          "^GDAXI",
+        "FTSE 100":     "^FTSE",
+        "EuroStoxx 50": "^STOXX50E",
+        "Nikkei 225":   "^N225",
+        "Hang Seng":    "^HSI",
+        "Shanghai":     "000001.SS",
+    }
+
+    # Batch download: YTD history and 7-day history for all indices at once
+    all_idx_tickers = list(index_tickers.values())
+    print("    [yfinance] Downloading YTD history for indices...")
+    try:
+        hist_ytd  = yf.download(all_idx_tickers, start=year_start,
+                                progress=False, auto_adjust=True, threads=True)
+        hist_week = yf.download(all_idx_tickers, period="7d",
+                                progress=False, auto_adjust=True, threads=True)
+    except Exception as e:
+        print(f"    ⚠️ Batch download failed: {e}")
+        hist_ytd  = None
+        hist_week = None
+
+    idx_data = {}
+    for name, ticker in index_tickers.items():
+        price, prev, chg_1d = quick_price(ticker, 2)
+        if not price:
+            continue
+
+        # YTD
+        chg_ytd = None
+        try:
+            if hist_ytd is not None and not hist_ytd.empty:
+                col = ("Close", ticker) if isinstance(hist_ytd.columns, pd.MultiIndex) else "Close"
+                series = hist_ytd[col].dropna()
+                if not series.empty:
+                    jan1 = float(series.iloc[0])
+                    chg_ytd = pct(price, jan1)
+        except Exception:
+            pass
+
+        # Weekly (5 trading days back)
+        chg_week = None
+        try:
+            if hist_week is not None and not hist_week.empty:
+                col = ("Close", ticker) if isinstance(hist_week.columns, pd.MultiIndex) else "Close"
+                series = hist_week[col].dropna()
+                if len(series) >= 2:
+                    week_open = float(series.iloc[0])
+                    chg_week = pct(price, week_open)
+        except Exception:
+            pass
+
+        idx_data[name] = {
+            "price":    price,
+            "chg_1d":   chg_1d,   # daily % change — CALCULATED, not estimated
+            "chg_week": chg_week, # 5-day % change — CALCULATED, not estimated
+            "chg_ytd":  chg_ytd,  # YTD % change  — CALCULATED from Jan 1 close
+        }
+
+    data["indices"] = idx_data
+    print(f"    ✅ {len(idx_data)} indices loaded with YTD and weekly data")
+
+    # ══ SECTOR ETFs — daily change, properly named ═════════════════════════════
+    # Explicit ticker→sector name mapping (no ambiguity for Claude)
+    sector_etfs = {
+        "XLK":  "Technology",
+        "XLF":  "Financials",
+        "XLE":  "Energy",
+        "XLV":  "Healthcare",
+        "XLI":  "Industrials",
+        "XLY":  "Consumer Discr.",
+        "XLB":  "Materials",
+        "XLU":  "Utilities",
+        "XLRE": "Real Estate",
+        "XLC":  "Comm. Services",
+        "XLP":  "Cons. Staples",
+    }
+    sector_data = {}
+    for ticker, sector_name in sector_etfs.items():
+        price, prev, chg = quick_price(ticker, 2)
+        if price:
+            sector_data[sector_name] = {
+                "ticker":   ticker,
+                "price":    price,
+                "chg_1d":   chg,  # daily % — CALCULATED
+            }
+    data["sectors"] = sector_data
+    print(f"    ✅ {len(sector_data)} sectors loaded")
+
+    # ══ FX RATES ═══════════════════════════════════════════════════════════════
     fx_pairs = {
         "EUR/USD": "EURUSD=X", "GBP/USD": "GBPUSD=X", "USD/JPY": "JPY=X",
-        "USD/CHF": "CHF=X", "AUD/USD": "AUDUSD=X", "USD/CNY": "CNY=X",
-        "USD/BRL": "BRL=X", "USD/MXN": "MXN=X", "USD/CAD": "CAD=X",
-        "DXY": "DX-Y.NYB"
+        "USD/CHF": "CHF=X",    "AUD/USD": "AUDUSD=X", "USD/CNY": "CNY=X",
+        "USD/BRL": "BRL=X",    "USD/MXN": "MXN=X",    "USD/CAD": "CAD=X",
+        "DXY":     "DX-Y.NYB",
     }
     fx_data = {}
     for pair, ticker in fx_pairs.items():
-        try:
-            t = yf.Ticker(ticker)
-            info = t.fast_info
-            price  = round(info.last_price, 4) if info.last_price else None
-            prev   = round(info.previous_close, 4) if info.previous_close else None
-            change = round(((price - prev) / prev) * 100, 4) if price and prev else None
-            if price:
-                fx_data[pair] = {"price": price, "change_pct": change}
-        except Exception as e:
-            print(f"    ⚠️ FX {pair}: {e}")
+        price, prev, chg = quick_price(ticker, 4)
+        if price:
+            fx_data[pair] = {"price": price, "chg_1d": chg}
     data["fx"] = fx_data
 
-    # ── Commodities (via ETFs/futures)
+    # ══ COMMODITIES (futures) ══════════════════════════════════════════════════
     commodities = {
-        "Gold": "GC=F", "Silver": "SI=F", "WTI Crude": "CL=F",
-        "Brent Crude": "BZ=F", "Natural Gas": "NG=F", "Copper": "HG=F",
-        "Wheat": "ZW=F", "Corn": "ZC=F", "Soybeans": "ZS=F"
+        "Gold":         ("GC=F",  "$/oz",    2),
+        "Silver":       ("SI=F",  "$/oz",    2),
+        "WTI Crude":    ("CL=F",  "$/bbl",   2),
+        "Brent Crude":  ("BZ=F",  "$/bbl",   2),
+        "Natural Gas":  ("NG=F",  "$/MMBtu", 3),
+        "Copper":       ("HG=F",  "$/lb",    3),
+        "Wheat":        ("ZW=F",  "¢/bu",    2),
+        "Corn":         ("ZC=F",  "¢/bu",    2),
+        "Soybeans":     ("ZS=F",  "¢/bu",    2),
     }
     cmd_data = {}
-    for name, ticker in commodities.items():
-        try:
-            t = yf.Ticker(ticker)
-            info = t.fast_info
-            price  = round(info.last_price, 2) if info.last_price else None
-            prev   = round(info.previous_close, 2) if info.previous_close else None
-            change = round(((price - prev) / prev) * 100, 2) if price and prev else None
-            if price:
-                cmd_data[name] = {"price": price, "change_pct": change}
-        except Exception as e:
-            print(f"    ⚠️ Commodity {name}: {e}")
+    for name, (ticker, unit, dec) in commodities.items():
+        price, prev, chg = quick_price(ticker, dec)
+        if price:
+            cmd_data[name] = {"price": price, "unit": unit, "chg_1d": chg}
     data["commodities"] = cmd_data
 
-    # ── US Treasuries
-    bonds = {
-        "US 2Y": "^IRX", "US 10Y": "^TNX", "US 30Y": "^TYX",
-        "GER 10Y Bund": "^TNX"  # fallback — FRED will give better data
-    }
+    # ══ US TREASURIES ══════════════════════════════════════════════════════════
+    bond_tickers = {"US 2Y": "^IRX", "US 10Y": "^TNX", "US 30Y": "^TYX"}
     bond_data = {}
-    for name, ticker in bonds.items():
+    for name, ticker in bond_tickers.items():
         try:
-            t = yf.Ticker(ticker)
-            info = t.fast_info
-            price  = round(info.last_price, 3) if info.last_price else None
-            prev   = round(info.previous_close, 3) if info.previous_close else None
-            change = round(price - prev, 3) if price and prev else None
-            if price:
-                bond_data[name] = {"yield": price, "change_bp": round(change * 100, 1) if change else None}
+            info  = yf.Ticker(ticker).fast_info
+            yld   = round(float(info.last_price), 3) if info.last_price else None
+            prev  = round(float(info.previous_close), 3) if info.previous_close else None
+            chg_bp = round((yld - prev) * 100, 1) if yld and prev else None
+            if yld:
+                bond_data[name] = {"yield_pct": yld, "chg_bp": chg_bp}
         except Exception:
             pass
+    # Compute 2s10s spread if both available
+    if "US 2Y" in bond_data and "US 10Y" in bond_data:
+        spread = round(
+            (bond_data["US 10Y"]["yield_pct"] - bond_data["US 2Y"]["yield_pct"]) * 100, 1
+        )
+        bond_data["spread_2s10s_bp"] = spread
     data["bonds"] = bond_data
 
-    # ── Key ETFs for sector/sentiment
-    etfs = {
-        "SPY": "S&P 500 ETF", "QQQ": "NASDAQ ETF", "IWM": "Russell 2000 ETF",
-        "GLD": "Gold ETF", "TLT": "Long Bond ETF", "HYG": "High Yield ETF",
-        "LQD": "Investment Grade ETF", "EEM": "Emerging Markets ETF",
-        "XLF": "Financials", "XLE": "Energy", "XLK": "Technology",
-        "XLV": "Healthcare", "XLI": "Industrials", "XLY": "Consumer Discr.",
-        "ARKK": "Innovation ETF"
+    # ══ BROAD MARKET ETFs (sentiment / flow) ══════════════════════════════════
+    broad_etfs = {
+        "SPY": "S&P 500", "QQQ": "NASDAQ 100", "IWM": "Russell 2000",
+        "GLD": "Gold",    "TLT": "Long Bond",   "HYG": "High Yield",
+        "LQD": "Inv.Grade","EEM": "EM Equities", "ARKK": "Innovation",
     }
     etf_data = {}
-    for ticker, name in etfs.items():
-        try:
-            t = yf.Ticker(ticker)
-            info = t.fast_info
-            price  = round(info.last_price, 2) if info.last_price else None
-            prev   = round(info.previous_close, 2) if info.previous_close else None
-            change = round(((price - prev) / prev) * 100, 2) if price and prev else None
-            if price:
-                etf_data[ticker] = {"name": name, "price": price, "change_pct": change}
-        except Exception:
-            pass
+    for ticker, label in broad_etfs.items():
+        price, prev, chg = quick_price(ticker, 2)
+        if price:
+            etf_data[ticker] = {"label": label, "price": price, "chg_1d": chg}
     data["etfs"] = etf_data
 
-    print(f"  [yfinance] ✅ {len(idx_data)} indices, {len(fx_data)} FX pairs, {len(cmd_data)} commodities")
+    print(f"  [yfinance] ✅ {len(idx_data)} indices | {len(fx_data)} FX | "
+          f"{len(cmd_data)} commodities | {len(sector_data)} sectors")
     return data
 
 
@@ -322,54 +417,123 @@ def collect_all_data() -> dict:
 # ══════════════════════════════════════════════════════════════════════════════
 #  CLAUDE : GÉNÉRATION DU RAPPORT
 # ══════════════════════════════════════════════════════════════════════════════
+def fmt(val, suffix="", na="N/A"):
+    """Format a value with sign and suffix, or return N/A."""
+    if val is None:
+        return na
+    try:
+        f = float(val)
+        return f"{f:+.2f}{suffix}" if suffix else f"{f}"
+    except Exception:
+        return str(val)
+
+
 def format_market_context(data: dict) -> str:
-    mkt = data.get("market", {})
+    """
+    Build a strict, explicitly-labelled data block for Claude.
+    Every field name maps 1-to-1 to a JSON key Claude must populate.
+    Claude is NOT allowed to estimate any of these values.
+    """
+    mkt  = data.get("market", {})
     fred = data.get("fred", {})
 
-    lines = ["=== REAL-TIME MARKET DATA (yfinance) ===\n"]
+    lines = [
+        "╔══════════════════════════════════════════════════════════════╗",
+        "║  VERIFIED MARKET DATA — ALL VALUES PYTHON-CALCULATED        ║",
+        "║  Claude must copy these values verbatim into the JSON.      ║",
+        "║  If a value shows N/A → output N/A, do NOT estimate.        ║",
+        "╚══════════════════════════════════════════════════════════════╝",
+        "",
+    ]
 
-    # Indices
-    lines.append("--- Major Indices ---")
+    # ── INDICES (daily + weekly + YTD — all calculated in Python)
+    lines.append("=== INDICES ===")
+    lines.append("  Format: NAME | price | daily_chg | weekly_chg_5d | ytd_chg")
     for name, v in mkt.get("indices", {}).items():
-        chg = f"{v['change_pct']:+.2f}%" if v.get("change_pct") is not None else "N/A"
-        lines.append(f"  {name}: {v['price']} ({chg})")
+        lines.append(
+            f"  {name} | "
+            f"price={v['price']} | "
+            f"daily={fmt(v.get('chg_1d'), '%')} | "
+            f"weekly_5d={fmt(v.get('chg_week'), '%')} | "
+            f"ytd={fmt(v.get('chg_ytd'), '%')}"
+        )
 
-    # FX
-    lines.append("\n--- FX Rates ---")
+    # ── SECTOR PERFORMANCE (daily, from sector ETFs — explicit mapping)
+    lines.append("\n=== SECTOR PERFORMANCE (daily %, from SPDR ETFs) ===")
+    lines.append("  Format: SECTOR_NAME | daily_chg | etf_ticker | etf_price")
+    for sector, v in mkt.get("sectors", {}).items():
+        lines.append(
+            f"  {sector} | "
+            f"daily={fmt(v.get('chg_1d'), '%')} | "
+            f"ticker={v.get('ticker','?')} | "
+            f"price={v.get('price','N/A')}"
+        )
+
+    # ── FX RATES
+    lines.append("\n=== FX RATES ===")
+    lines.append("  Format: PAIR | rate | daily_chg")
     for pair, v in mkt.get("fx", {}).items():
-        chg = f"{v['change_pct']:+.4f}%" if v.get("change_pct") is not None else "N/A"
-        lines.append(f"  {pair}: {v['price']} ({chg})")
+        lines.append(
+            f"  {pair} | "
+            f"rate={v['price']} | "
+            f"daily={fmt(v.get('chg_1d'), '%')}"
+        )
 
-    # Commodities
-    lines.append("\n--- Commodities ---")
+    # ── COMMODITIES
+    lines.append("\n=== COMMODITIES ===")
+    lines.append("  Format: NAME | price | unit | daily_chg")
     for name, v in mkt.get("commodities", {}).items():
-        chg = f"{v['change_pct']:+.2f}%" if v.get("change_pct") is not None else "N/A"
-        lines.append(f"  {name}: {v['price']} ({chg})")
+        lines.append(
+            f"  {name} | "
+            f"price={v['price']} | "
+            f"unit={v.get('unit','?')} | "
+            f"daily={fmt(v.get('chg_1d'), '%')}"
+        )
 
-    # Bonds
-    lines.append("\n--- US Yields ---")
-    for name, v in mkt.get("bonds", {}).items():
-        bp = f"{v['change_bp']:+.1f}bp" if v.get("change_bp") is not None else "N/A"
-        lines.append(f"  {name}: {v['yield']}% ({bp})")
+    # ── US TREASURIES
+    lines.append("\n=== US TREASURY YIELDS ===")
+    bonds = mkt.get("bonds", {})
+    for name, v in bonds.items():
+        if name == "spread_2s10s_bp":
+            continue
+        bp = f"{v['chg_bp']:+.1f}bp" if v.get("chg_bp") is not None else "N/A"
+        lines.append(f"  {name} | yield={v['yield_pct']}% | change={bp}")
+    spread = bonds.get("spread_2s10s_bp")
+    if spread is not None:
+        sign = "+" if spread >= 0 else ""
+        lines.append(f"  2s10s spread = {sign}{spread}bp  "
+                     f"({'INVERTED — recession signal' if spread < 0 else 'NORMAL — positive slope'})")
 
-    # Sector ETFs
-    lines.append("\n--- Sector ETFs (daily change) ---")
+    # ── BROAD ETFs (sentiment / flow signals)
+    lines.append("\n=== BROAD ETFs (flow / sentiment signals) ===")
+    lines.append("  Format: TICKER (label) | price | daily_chg")
     for ticker, v in mkt.get("etfs", {}).items():
-        chg = f"{v['change_pct']:+.2f}%" if v.get("change_pct") is not None else "N/A"
-        lines.append(f"  {ticker} ({v['name']}): ${v['price']} {chg}")
+        lines.append(
+            f"  {ticker} ({v['label']}) | "
+            f"price=${v['price']} | "
+            f"daily={fmt(v.get('chg_1d'), '%')}"
+        )
 
-    # FRED
-    lines.append("\n=== FRED MACRO DATA ===")
+    # ── FRED MACRO
+    lines.append("\n=== FRED MACRO DATA (most recent official reading) ===")
     for name, v in fred.items():
-        prev_str = f" | prev: {v['prev']}" if v.get("prev") else ""
-        lines.append(f"  {name}: {v['value']} ({v['date']}){prev_str}")
+        prev_str = f" | prev_reading={v['prev']}" if v.get("prev") else ""
+        lines.append(f"  {name} = {v['value']} (as of {v['date']}){prev_str}")
 
-    # Economic Calendar
+    # ── ECONOMIC CALENDAR
     cal = data.get("economic_calendar", [])
     if cal:
-        lines.append("\n=== UPCOMING ECONOMIC EVENTS (high impact) ===")
+        lines.append("\n=== UPCOMING HIGH-IMPACT ECONOMIC EVENTS ===")
         for e in cal[:8]:
-            lines.append(f"  [{e.get('country','?')}] {e.get('event','')} — {e.get('time','')} | prev: {e.get('prev','')} | est: {e.get('estimate','?')}")
+            lines.append(
+                f"  [{e.get('country','?')}] {e.get('event','')} | "
+                f"time={e.get('time','')} | "
+                f"prev={e.get('prev','?')} | "
+                f"estimate={e.get('estimate','?')}"
+            )
+    else:
+        lines.append("\n=== UPCOMING HIGH-IMPACT ECONOMIC EVENTS ===")
+        lines.append("  No high-impact events in the next 48h.")
 
     return "\n".join(lines)
 
@@ -382,7 +546,7 @@ def format_email_context(emails: list[dict]) -> str:
     for i, email in enumerate(emails, 1):
         lines.append(f"--- Email {i}: {email['subject']} ---")
         lines.append(f"From: {email['from']} | Date: {email['date']}")
-        lines.append(email['body'][:2500])
+        lines.append(email['body'])  # Full body, no truncation
         lines.append("")
     return "\n".join(lines)
 
@@ -395,35 +559,65 @@ def generate_report_json(market_data: dict, emails: list[dict]) -> dict:
     email_context  = format_email_context(emails)
 
     tomorrow_str = (NOW + timedelta(days=1)).strftime("%B %d, %Y")
+    fred_vix     = market_data.get("fred", {}).get("vix", {}).get("value", "N/A")
+    mkt_bonds_vix = fred_vix
 
     system = (
         f"You are a senior financial analyst (ex-Goldman Sachs, ex-Bridgewater). "
-        f"You produce a daily global markets intelligence brief — dense, analytical, "
-        f"explanatory, and actionable. Written for sophisticated finance professionals. "
-        f"Date: {DATE_FR}. "
-        f"You have access to REAL market data and email intelligence below. "
-        f"Synthesize them. Never regurgitate. Explain causality and second-order effects. "
-        f"Write in structured paragraphs. Prose over bullet points. "
+        f"You produce a daily global markets intelligence brief for {DATE_FR}. "
+        f"You will be given VERIFIED market data that was Python-calculated. "
+        f"\n\n"
+        f"ABSOLUTE DATA RULES — NON-NEGOTIABLE:\n"
+        f"1. NEVER invent, estimate, or approximate any numerical value (price, %, bp, yield).\n"
+        f"2. NEVER change a number that was given to you — copy it exactly.\n"
+        f"3. If a field shows N/A in the data, output N/A in the JSON — never guess.\n"
+        f"4. The 'change' fields in the JSON must come ONLY from the data block, nothing else.\n"
+        f"5. For 'ytd', use the ytd= value from the INDICES section — it is already calculated.\n"
+        f"6. For sector performance, use ONLY the daily= values from the SECTOR PERFORMANCE section.\n"
+        f"7. Your job is ANALYSIS and NARRATIVE — numbers come from the data, words come from you.\n"
+        f"\n"
+        f"Style: dense analytical prose, explanatory, first-person institutional voice. "
         f"ALL text in JSON must be in ENGLISH. "
         f"Reply ONLY with valid JSON, no markdown fences, no surrounding text."
     )
 
-    user = f"""Generate a COMPLETE daily global markets intelligence brief for {DATE_FR}.
+    user = f"""Generate a daily markets intelligence brief for {DATE_FR}.
 
 {market_context}
 
 {email_context}
 
-MASTER PROMPT INSTRUCTIONS:
-- This is a DAILY brief (~3 pages of dense analysis), lighter than the weekly report
-- Synthesize email intelligence + market data — connect the dots, explain causality
-- Surface second-order implications and hidden opportunities
-- Be critical and selective — never regurgitate. Explain origins and mechanisms
-- Go deep on individual stories — this is NOT only a macro newsletter
-- Prose paragraphs, analytical tone, confident explanations
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ANALYTICAL INSTRUCTIONS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+- Synthesize email intelligence + verified market data
+- Explain causality and second-order effects
+- Dense analytical paragraphs — no bullet lists
+- Surface what the consensus is missing
 - All text in ENGLISH
 
-Return this exact JSON structure (ALL keys mandatory):
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DATA POPULATION RULES (READ CAREFULLY)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+For the "indices" array: populate each object using EXACT values from the INDICES section above.
+  - "value"  → the price= field
+  - "change" → the daily= field formatted as "+X.XX%" or "-X.XX%"
+  - "ytd"    → the ytd= field formatted as "+X.XX%" or "-X.XX%"
+  - If ytd=N/A → output "N/A", never guess
+
+For "sector_performance": populate using EXACT values from SECTOR PERFORMANCE section.
+  - "change"     → the daily= field
+  - "change_num" → the raw number (positive or negative float)
+  - "direction"  → "up" if positive, "down" if negative, "flat" if zero/N/A
+
+For FX pairs: use rate= and daily= from FX RATES section.
+For commodities: use price= and daily= from COMMODITIES section.
+For yield_curve: use yield= from US TREASURY YIELDS section.
+  - spread_2_10 → use the "2s10s spread = Xbp" line
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Return this JSON (ALL keys mandatory):
 
 {{
   "date": "{DATE_FR}",
@@ -433,10 +627,10 @@ Return this exact JSON structure (ALL keys mandatory):
 
   "section1_overview": {{
     "title": "Global Market Overview & Sentiment",
-    "headline": "Punchy 1-sentence market narrative for today",
+    "headline": "One punchy sentence — the dominant market narrative today",
     "paragraphs": [
-      "§1 — What happened across markets today: dominant narrative, risk tone, key movers (6-8 lines)",
-      "§2 — Why this mood exists: macro context, recent catalyst chain, institutional behavior (5-6 lines)",
+      "§1 — What moved across markets today and why (dominant narrative, risk tone) (6-8 lines)",
+      "§2 — Macro backdrop and catalyst chain that explains the mood (5-6 lines)",
       "§3 — Secondary cross-currents and what the consensus is missing (4-5 lines)"
     ]
   }},
@@ -444,8 +638,8 @@ Return this exact JSON structure (ALL keys mandatory):
   "section2_macro": {{
     "title": "Macro-Economic Environment",
     "paragraphs": [
-      "§1 — Current macro forces: inflation trend (use FRED CPI), labor market (FRED unemployment), liquidity conditions (5-6 lines)",
-      "§2 — How these transmit into asset prices today specifically (4-5 lines)",
+      "§1 — Inflation trend using FRED cpi_yoy value, labor market using FRED unemployment, liquidity (5-6 lines)",
+      "§2 — How these macro forces transmit into asset prices today (4-5 lines)",
       "§3 — What could break the current equilibrium — explicit scenario (3-4 lines)"
     ]
   }},
@@ -453,48 +647,48 @@ Return this exact JSON structure (ALL keys mandatory):
   "section3_equities": {{
     "title": "Equity Markets",
     "indices": [
-      {{"name": "S&P 500", "value": "use real data", "change": "+/-X.X%", "ytd": "~X.X%"}},
-      {{"name": "NASDAQ 100", "value": "...", "change": "...", "ytd": "..."}},
-      {{"name": "Dow Jones", "value": "...", "change": "...", "ytd": "..."}},
-      {{"name": "Russell 2000", "value": "...", "change": "...", "ytd": "..."}},
-      {{"name": "VIX", "value": "...", "change": "...", "ytd": "..."}},
-      {{"name": "CAC 40", "value": "...", "change": "...", "ytd": "..."}},
-      {{"name": "DAX", "value": "...", "change": "...", "ytd": "..."}},
-      {{"name": "EuroStoxx 50", "value": "...", "change": "...", "ytd": "..."}},
-      {{"name": "Nikkei 225", "value": "...", "change": "...", "ytd": "..."}},
-      {{"name": "Hang Seng", "value": "...", "change": "...", "ytd": "..."}},
-      {{"name": "Shanghai", "value": "...", "change": "...", "ytd": "..."}}
+      {{"name": "S&P 500",      "value": "COPY from data", "change": "COPY daily from data", "ytd": "COPY ytd from data"}},
+      {{"name": "NASDAQ 100",   "value": "COPY from data", "change": "COPY daily from data", "ytd": "COPY ytd from data"}},
+      {{"name": "Dow Jones",    "value": "COPY from data", "change": "COPY daily from data", "ytd": "COPY ytd from data"}},
+      {{"name": "Russell 2000", "value": "COPY from data", "change": "COPY daily from data", "ytd": "COPY ytd from data"}},
+      {{"name": "VIX",          "value": "COPY from data", "change": "COPY daily from data", "ytd": "N/A"}},
+      {{"name": "CAC 40",       "value": "COPY from data", "change": "COPY daily from data", "ytd": "COPY ytd from data"}},
+      {{"name": "DAX",          "value": "COPY from data", "change": "COPY daily from data", "ytd": "COPY ytd from data"}},
+      {{"name": "EuroStoxx 50", "value": "COPY from data", "change": "COPY daily from data", "ytd": "COPY ytd from data"}},
+      {{"name": "Nikkei 225",   "value": "COPY from data", "change": "COPY daily from data", "ytd": "COPY ytd from data"}},
+      {{"name": "Hang Seng",    "value": "COPY from data", "change": "COPY daily from data", "ytd": "COPY ytd from data"}},
+      {{"name": "Shanghai",     "value": "COPY from data", "change": "COPY daily from data", "ytd": "COPY ytd from data"}}
     ],
     "sector_performance": [
-      {{"sector": "Technology", "change": "+/-X.X%", "direction": "up|down", "change_num": 0.0}},
-      {{"sector": "Financials", "change": "...", "direction": "...", "change_num": 0.0}},
-      {{"sector": "Energy", "change": "...", "direction": "...", "change_num": 0.0}},
-      {{"sector": "Healthcare", "change": "...", "direction": "...", "change_num": 0.0}},
-      {{"sector": "Industrials", "change": "...", "direction": "...", "change_num": 0.0}},
-      {{"sector": "Consumer Discr.", "change": "...", "direction": "...", "change_num": 0.0}},
-      {{"sector": "Materials", "change": "...", "direction": "...", "change_num": 0.0}},
-      {{"sector": "Utilities", "change": "...", "direction": "...", "change_num": 0.0}},
-      {{"sector": "Real Estate", "change": "...", "direction": "...", "change_num": 0.0}},
-      {{"sector": "Comm. Services", "change": "...", "direction": "...", "change_num": 0.0}},
-      {{"sector": "Cons. Staples", "change": "...", "direction": "...", "change_num": 0.0}}
+      {{"sector": "Technology",      "change": "COPY daily from data", "direction": "up/down", "change_num": 0.0}},
+      {{"sector": "Financials",      "change": "COPY daily from data", "direction": "up/down", "change_num": 0.0}},
+      {{"sector": "Energy",          "change": "COPY daily from data", "direction": "up/down", "change_num": 0.0}},
+      {{"sector": "Healthcare",      "change": "COPY daily from data", "direction": "up/down", "change_num": 0.0}},
+      {{"sector": "Industrials",     "change": "COPY daily from data", "direction": "up/down", "change_num": 0.0}},
+      {{"sector": "Consumer Discr.", "change": "COPY daily from data", "direction": "up/down", "change_num": 0.0}},
+      {{"sector": "Materials",       "change": "COPY daily from data", "direction": "up/down", "change_num": 0.0}},
+      {{"sector": "Utilities",       "change": "COPY daily from data", "direction": "up/down", "change_num": 0.0}},
+      {{"sector": "Real Estate",     "change": "COPY daily from data", "direction": "up/down", "change_num": 0.0}},
+      {{"sector": "Comm. Services",  "change": "COPY daily from data", "direction": "up/down", "change_num": 0.0}},
+      {{"sector": "Cons. Staples",   "change": "COPY daily from data", "direction": "up/down", "change_num": 0.0}}
     ],
     "us": {{
       "headline": "...",
-      "body": "US equity market deep dive: macro drivers, sector rotation, institutional flows, key earnings/catalysts today. Use real index data. (8-10 lines)",
+      "body": "US deep dive: sector rotation, flows, earnings catalysts. Reference the real S&P 500 price and daily change from the data. (8-10 lines)",
       "direction": "bullish|bearish|neutral",
       "key_driver": "Main driver in one sentence",
       "risk": "Main risk in one sentence"
     }},
     "europe": {{
       "headline": "...",
-      "body": "European equity analysis: ECB posture, EUR dynamics, sector-level leaders/laggards, geopolitical backdrop. (6-8 lines)",
+      "body": "European analysis: ECB, EUR dynamics, sector leaders/laggards. Reference real DAX/CAC data. (6-8 lines)",
       "direction": "bullish|bearish|neutral",
       "key_driver": "...",
       "risk": "..."
     }},
     "asia": {{
       "headline": "...",
-      "body": "Asian equity analysis: China stimulus/property, Japan BOJ dynamics, EM differentiation. (6-8 lines)",
+      "body": "Asian analysis: China, Japan BOJ, EM. Reference real Nikkei/Hang Seng data. (6-8 lines)",
       "direction": "bullish|bearish|neutral",
       "key_driver": "...",
       "risk": "..."
@@ -504,74 +698,74 @@ Return this exact JSON structure (ALL keys mandatory):
   "section4_fixed_income": {{
     "title": "Fixed Income & Rates",
     "yield_curve": {{
-      "us_2y": "use real data or estimate",
-      "us_10y": "...",
-      "us_30y": "...",
-      "spread_2_10": "X bp",
-      "interpretation": "Yield curve interpretation: shape, inversion status, what it signals for growth expectations (4-5 lines)"
+      "us_2y":        "COPY yield from data",
+      "us_10y":       "COPY yield from data",
+      "us_30y":       "COPY yield from data",
+      "spread_2_10":  "COPY 2s10s spread from data (e.g. +45bp or -12bp)",
+      "interpretation": "Yield curve analysis: shape, inversion status, growth signal. (4-5 lines)"
     }},
-    "narrative": "Full fixed income narrative: Fed posture, supply/demand for bonds, credit spreads (use FRED), institutional positioning, CB credibility, links to equities and FX. (8-10 lines)"
+    "narrative": "Full fixed income analysis: Fed stance, bond supply/demand, credit spreads from FRED, CB credibility. (8-10 lines)"
   }},
 
   "section5_forex": {{
     "title": "Foreign Exchange",
-    "dxy": {{"value": "use real data", "change": "+/-X.X%", "interpretation": "DXY narrative and implications (3-4 lines)"}},
-    "narrative": "Global FX dynamics: rate differentials, CB divergence, carry trades, geopolitical flows. (6-8 lines)",
+    "dxy": {{
+      "value":          "COPY DXY rate from data",
+      "change":         "COPY DXY daily from data",
+      "interpretation": "DXY analysis and global implications (3-4 lines)"
+    }},
+    "narrative": "Global FX dynamics: rate differentials, CB divergence, carry trades. (6-8 lines)",
     "pairs": [
-      {{"pair": "EUR/USD", "value": "use real data", "change": "+/-X.X%", "change_num": 0.0, "direction": "up|down|flat", "analysis": "EUR/USD drivers today: ECB/Fed divergence, eurozone data, positioning. (3-4 lines)", "support": "X.XXXX", "resistance": "X.XXXX"}},
-      {{"pair": "GBP/USD", "value": "...", "change": "...", "change_num": 0.0, "direction": "...", "analysis": "...", "support": "...", "resistance": "..."}},
-      {{"pair": "USD/JPY", "value": "...", "change": "...", "change_num": 0.0, "direction": "...", "analysis": "...", "support": "...", "resistance": "..."}},
-      {{"pair": "USD/CHF", "value": "...", "change": "...", "change_num": 0.0, "direction": "...", "analysis": "...", "support": "...", "resistance": "..."}},
-      {{"pair": "AUD/USD", "value": "...", "change": "...", "change_num": 0.0, "direction": "...", "analysis": "...", "support": "...", "resistance": "..."}},
-      {{"pair": "USD/CNY", "value": "...", "change": "...", "change_num": 0.0, "direction": "...", "analysis": "...", "support": "...", "resistance": "..."}}
+      {{"pair": "EUR/USD", "value": "COPY rate",  "change": "COPY daily", "change_num": 0.0, "direction": "up|down|flat", "analysis": "ECB/Fed divergence, eurozone data, positioning (3-4 lines)", "support": "technical level", "resistance": "technical level"}},
+      {{"pair": "GBP/USD", "value": "COPY rate",  "change": "COPY daily", "change_num": 0.0, "direction": "...", "analysis": "...", "support": "...", "resistance": "..."}},
+      {{"pair": "USD/JPY", "value": "COPY rate",  "change": "COPY daily", "change_num": 0.0, "direction": "...", "analysis": "...", "support": "...", "resistance": "..."}},
+      {{"pair": "USD/CHF", "value": "COPY rate",  "change": "COPY daily", "change_num": 0.0, "direction": "...", "analysis": "...", "support": "...", "resistance": "..."}},
+      {{"pair": "AUD/USD", "value": "COPY rate",  "change": "COPY daily", "change_num": 0.0, "direction": "...", "analysis": "...", "support": "...", "resistance": "..."}},
+      {{"pair": "USD/CNY", "value": "COPY rate",  "change": "COPY daily", "change_num": 0.0, "direction": "...", "analysis": "...", "support": "...", "resistance": "..."}}
     ]
   }},
 
   "section6_commodities": {{
     "title": "Commodities & Alternative Assets",
-    "narrative": "Cross-asset commodities narrative: inflation signaling, capital rotation from equities/bonds, geopolitical supply dynamics, dollar impact. (6-8 lines)",
+    "narrative": "Cross-asset commodities narrative: inflation signal, rotation, geopolitics, dollar. (6-8 lines)",
     "items": [
-      {{"name": "Gold", "value": "use real data", "unit": "$/oz", "change": "+/-X.X%", "change_num": 0.0, "direction": "up|down", "analysis": "2-3 line analysis of gold today: safe haven flows, real yields, dollar impact"}},
-      {{"name": "WTI Crude", "value": "...", "unit": "$/bbl", "change": "...", "change_num": 0.0, "direction": "...", "analysis": "..."}},
-      {{"name": "Brent Crude", "value": "...", "unit": "$/bbl", "change": "...", "change_num": 0.0, "direction": "...", "analysis": "..."}},
-      {{"name": "Natural Gas", "value": "...", "unit": "$/MMBtu", "change": "...", "change_num": 0.0, "direction": "...", "analysis": "..."}},
-      {{"name": "Copper", "value": "...", "unit": "$/lb", "change": "...", "change_num": 0.0, "direction": "...", "analysis": "..."}},
-      {{"name": "Silver", "value": "...", "unit": "$/oz", "change": "...", "change_num": 0.0, "direction": "...", "analysis": "..."}},
-      {{"name": "Wheat", "value": "...", "unit": "¢/bu", "change": "...", "change_num": 0.0, "direction": "...", "analysis": "..."}}
+      {{"name": "Gold",        "value": "COPY price", "unit": "$/oz",    "change": "COPY daily", "change_num": 0.0, "direction": "up|down", "analysis": "2-3 lines: safe-haven flows, real yields, dollar impact"}},
+      {{"name": "WTI Crude",   "value": "COPY price", "unit": "$/bbl",   "change": "COPY daily", "change_num": 0.0, "direction": "...", "analysis": "..."}},
+      {{"name": "Brent Crude", "value": "COPY price", "unit": "$/bbl",   "change": "COPY daily", "change_num": 0.0, "direction": "...", "analysis": "..."}},
+      {{"name": "Natural Gas", "value": "COPY price", "unit": "$/MMBtu", "change": "COPY daily", "change_num": 0.0, "direction": "...", "analysis": "..."}},
+      {{"name": "Copper",      "value": "COPY price", "unit": "$/lb",    "change": "COPY daily", "change_num": 0.0, "direction": "...", "analysis": "..."}},
+      {{"name": "Silver",      "value": "COPY price", "unit": "$/oz",    "change": "COPY daily", "change_num": 0.0, "direction": "...", "analysis": "..."}},
+      {{"name": "Wheat",       "value": "COPY price", "unit": "¢/bu",    "change": "COPY daily", "change_num": 0.0, "direction": "...", "analysis": "..."}}
     ]
   }},
 
   "section7_positioning": {{
     "title": "Market Positioning & Sentiment",
-    "narrative": "True sentiment analysis beyond headlines. VIX level and what it implies. Options market structure: put/call ratio interpretation, skew, term structure. Derivatives pricing of tail risk. Institutional flow signals from ETF data. Complacency or fear — and why. (8-10 lines)"
+    "narrative": "VIX={mkt_bonds_vix} from FRED data. ETF flows analysis using TLT/HYG/GLD data above. Put/call ratio interpretation, skew, institutional positioning signals. Complacency or fear — and why. (8-10 lines)"
   }},
 
   "section8_email_intelligence": {{
     "title": "Email Intelligence — Daily Market Watch",
-    "summary": "Synthesis of today's email intelligence: key themes, important stories, second-order implications. Connect email content to market moves observed above. Surface what the emails reveal that open-source data doesn't. (5-7 lines, or note if no emails)",
+    "summary": "Synthesis of email intelligence: key themes, second-order implications. Connect to market moves above. (5-7 lines, or state no emails if none received)",
     "key_stories": [
-      {{"title": "Story title from email", "body": "2-3 line analysis connecting this story to markets", "relevance": "high|medium"}}
+      {{"title": "Story from email", "body": "2-3 line market analysis connecting this story", "relevance": "high|medium"}}
     ]
   }},
 
   "section9_synthesis": {{
     "title": "Daily Synthesis & Outlook",
     "regime": "risk_on|risk_off|transition|stagflation|goldilocks",
-    "global_view": "Holistic synthesis: interconnection between rates/equities/dollar/commodities today, institutional flows, macro backdrop, tail risks, what to watch tomorrow. This is the centerpiece. (10-12 lines minimum)",
-    "tomorrow_watch": "Key events and data to monitor on {tomorrow_str} — be specific about timing and expected market impact (4-5 lines)",
+    "global_view": "Holistic synthesis: interconnections between rates/equities/dollar/commodities today. Reference actual prices from data. Institutional flows, macro backdrop, tail risks. (10-12 lines minimum)",
+    "tomorrow_watch": "Key events and data to watch on {tomorrow_str} — specific times and expected market impact (4-5 lines)",
     "strategy": [
-      {{"type": "Tactical", "recommendation": "...", "rationale": "3-4 line rationale", "timeframe": "1-3 days", "conviction": "high|medium|low"}},
-      {{"type": "Risk Watch", "recommendation": "...", "rationale": "...", "timeframe": "...", "conviction": "..."}},
+      {{"type": "Tactical",    "recommendation": "...", "rationale": "3-4 line rationale referencing real market levels", "timeframe": "1-3 days", "conviction": "high|medium|low"}},
+      {{"type": "Risk Watch",  "recommendation": "...", "rationale": "...", "timeframe": "...", "conviction": "..."}},
       {{"type": "Opportunity", "recommendation": "...", "rationale": "...", "timeframe": "...", "conviction": "..."}}
     ]
   }}
 }}
 
-IMPORTANT:
-- Use REAL data from the market context above — do NOT invent prices or yields
-- Write long, analytical paragraphs — not bullet lists
-- Total report: ~15,000–20,000 characters
-- ALL TEXT IN ENGLISH"""
+REMINDER: copy ALL numerical values from the data block above. Do not change a single digit."""
 
     for attempt in range(3):
         try:
