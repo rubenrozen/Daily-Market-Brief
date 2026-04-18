@@ -25,7 +25,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pip install anthropic reportlab requests yfinance
+          pip install anthropic reportlab requests yfinance pandas
 
       - name: Create data directory
         run: mkdir -p data
