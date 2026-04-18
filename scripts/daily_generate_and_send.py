@@ -803,290 +803,536 @@ def save_json(report: dict, market_data: dict):
 
 
 # ══════════════════════════════════════════════════════════════════════════════
-#  GÉNÉRATION PDF
+#  GÉNÉRATION PDF — v2 (design matching weekly brief)
 # ══════════════════════════════════════════════════════════════════════════════
-# Color palette (matching weekly brief)
+from reportlab.platypus import KeepTogether
+from reportlab.lib.enums import TA_RIGHT, TA_LEFT
+
+# Color palette
 BG      = colors.HexColor("#07070D")
 BG2     = colors.HexColor("#0D0D16")
+BG3     = colors.HexColor("#12121C")
 GOLD    = colors.HexColor("#B8965A")
 GOLD_LT = colors.HexColor("#D4AF7A")
+GOLD_DIM= colors.HexColor("#2A2010")
 LIGHT   = colors.HexColor("#E8E8F4")
 TEXT    = colors.HexColor("#C8C8D8")
+TEXT2   = colors.HexColor("#9898B0")
 MUTED   = colors.HexColor("#525268")
 GREEN   = colors.HexColor("#3DB87A")
+GREEN_DIM=colors.HexColor("#0D1F15")
 RED     = colors.HexColor("#C85454")
+RED_DIM = colors.HexColor("#1F0D0D")
 YELLOW  = colors.HexColor("#C89A3D")
 BLUE    = colors.HexColor("#5B7FD4")
 BORDER  = colors.HexColor("#1E1E2E")
+BORDER2 = colors.HexColor("#252535")
+
+PAGE_W  = A4[0]
+PAGE_H  = A4[1]
+L_MAR   = 16 * mm
+R_MAR   = 16 * mm
+T_MAR   = 18 * mm
+B_MAR   = 18 * mm
+USABLE  = PAGE_W - L_MAR - R_MAR  # ~163mm
 
 
-def ps(name: str, **kwargs) -> ParagraphStyle:
-    defaults = dict(fontName="Helvetica", textColor=TEXT, fontSize=9,
-                    leading=14, spaceAfter=6, spaceBefore=2, leftIndent=0)
-    defaults.update(kwargs)
-    return ParagraphStyle(name, **defaults)
+def _ps(name, **kw):
+    base = dict(fontName="Helvetica", textColor=TEXT, fontSize=9,
+                leading=15, spaceAfter=0, spaceBefore=0, leftIndent=0, rightIndent=0)
+    base.update(kw)
+    return ParagraphStyle(name, **base)
 
 
-def hr(c=BORDER, w=0.5):
-    return HRFlowable(width="100%", thickness=w, color=c, spaceAfter=8, spaceBefore=4)
+def _hr(col=BORDER, w=0.4, before=4, after=6):
+    return HRFlowable(width="100%", thickness=w, color=col,
+                      spaceBefore=before, spaceAfter=after)
 
 
-def tbl(data, col_widths, row_colors=None):
-    t = Table(data, colWidths=col_widths, repeatRows=1)
-    style = [
-        ("BACKGROUND", (0, 0), (-1, 0), BG2),
-        ("TEXTCOLOR",  (0, 0), (-1, 0), GOLD),
-        ("FONTNAME",   (0, 0), (-1, 0), "Helvetica-Bold"),
-        ("FONTSIZE",   (0, 0), (-1, 0), 7),
-        ("ROWBACKGROUNDS", (0, 1), (-1, -1), [BG, BG2]),
-        ("GRID",       (0, 0), (-1, -1), 0.3, BORDER),
-        ("LEFTPADDING",  (0, 0), (-1, -1), 6),
-        ("RIGHTPADDING", (0, 0), (-1, -1), 6),
-        ("TOPPADDING",   (0, 0), (-1, -1), 4),
-        ("BOTTOMPADDING",(0, 0), (-1, -1), 4),
-        ("VALIGN",     (0, 0), (-1, -1), "MIDDLE"),
-    ]
-    t.setStyle(TableStyle(style))
+def _tbl(rows, widths, header_bg=BG2, stripe_a=BG, stripe_b=BG2,
+         font_size=8, hdr_font_size=7.5, v_pad=5, h_pad=7):
+    """Build a styled table that auto-wraps cell content."""
+    t = Table(rows, colWidths=widths, repeatRows=1,
+              style=TableStyle([
+                  # Header row
+                  ("BACKGROUND",   (0, 0), (-1, 0),  header_bg),
+                  ("TEXTCOLOR",    (0, 0), (-1, 0),  GOLD),
+                  ("FONTNAME",     (0, 0), (-1, 0),  "Helvetica-Bold"),
+                  ("FONTSIZE",     (0, 0), (-1, 0),  hdr_font_size),
+                  ("BOTTOMPADDING",(0, 0), (-1, 0),  6),
+                  ("TOPPADDING",   (0, 0), (-1, 0),  6),
+                  # Data rows
+                  ("ROWBACKGROUNDS",(0, 1), (-1, -1), [stripe_a, stripe_b]),
+                  ("FONTNAME",     (0, 1), (-1, -1), "Helvetica"),
+                  ("FONTSIZE",     (0, 1), (-1, -1), font_size),
+                  ("TEXTCOLOR",    (0, 1), (-1, -1), TEXT),
+                  ("TOPPADDING",   (0, 1), (-1, -1), v_pad),
+                  ("BOTTOMPADDING",(0, 1), (-1, -1), v_pad),
+                  ("LEFTPADDING",  (0, 0), (-1, -1), h_pad),
+                  ("RIGHTPADDING", (0, 0), (-1, -1), h_pad),
+                  ("VALIGN",       (0, 0), (-1, -1), "MIDDLE"),
+                  ("LINEBELOW",    (0, 0), (-1, 0),  0.5, GOLD),
+                  ("LINEBELOW",    (0, 1), (-1, -1), 0.3, BORDER),
+                  ("BOX",          (0, 0), (-1, -1), 0.5, BORDER),
+              ]))
     return t
+
+
+def _section_header(story, num, title):
+    """Render a clean numbered section header identical to the weekly brief."""
+    story.append(Spacer(1, 14))
+    # Number pill + title on same baseline
+    story.append(Paragraph(
+        f'<font color="#B8965A" size="8" fontName="Helvetica-Bold">'
+        f'{"0" if num < 10 else ""}{num}</font>'
+        f'<font color="#2A2010">  ·  </font>'
+        f'<font color="#D4AF7A" size="15" fontName="Helvetica-Bold">{title}</font>',
+        _ps(f"sh{num}", fontSize=15, textColor=GOLD_LT,
+            fontName="Helvetica-Bold", spaceBefore=0, spaceAfter=6, leading=20)))
+    story.append(_hr(GOLD, w=0.7, before=0, after=10))
+
+
+def _region_card(story, label, direction, headline, body, key_driver, risk):
+    """Bordered card for US / Europe / Asia regional analysis."""
+    dir_hex = "3DB87A" if direction == "bullish" else "C85454" if direction == "bearish" else "C89A3D"
+    dir_label = direction.upper() if direction else "NEUTRAL"
+
+    inner = []
+    inner.append(Paragraph(
+        f'<font color="#{dir_hex}" size="8" fontName="Helvetica-Bold">'
+        f'{label.upper()}  ·  {dir_label}</font>',
+        _ps("rl", fontSize=8, fontName="Helvetica-Bold",
+            textColor=colors.HexColor(f"#{dir_hex}"), spaceAfter=4)))
+    if headline:
+        inner.append(Paragraph(headline,
+            _ps("rh", fontSize=9.5, fontName="Helvetica-Bold",
+                textColor=LIGHT, leading=13, spaceAfter=5)))
+    if body:
+        inner.append(Paragraph(str(body),
+            _ps("rb", fontSize=8.5, textColor=TEXT2, leading=13, spaceAfter=4)))
+    if key_driver:
+        inner.append(Paragraph(
+            f'<font color="#B8965A">▶</font>  {key_driver}',
+            _ps("rd", fontSize=8, textColor=TEXT2, leading=12, spaceAfter=2)))
+    if risk:
+        inner.append(Paragraph(
+            f'<font color="#C85454">⚠</font>  {risk}',
+            _ps("rr", fontSize=8, textColor=RED, leading=12, spaceAfter=0)))
+
+    # Wrap in a 1-cell table to get the border + background
+    card = Table([[inner]], colWidths=[USABLE],
+                 style=TableStyle([
+                     ("BACKGROUND",    (0, 0), (-1, -1), BG2),
+                     ("BOX",           (0, 0), (-1, -1), 0.5, BORDER2),
+                     ("LINEBEfore",    (0, 0), (0, -1),  3,   colors.HexColor(f"#{dir_hex}")),
+                     ("TOPPADDING",    (0, 0), (-1, -1), 10),
+                     ("BOTTOMPADDING", (0, 0), (-1, -1), 10),
+                     ("LEFTPADDING",   (0, 0), (-1, -1), 12),
+                     ("RIGHTPADDING",  (0, 0), (-1, -1), 12),
+                     ("VALIGN",        (0, 0), (-1, -1), "TOP"),
+                 ]))
+    story.append(KeepTogether([card, Spacer(1, 6)]))
+
+
+def _strategy_card(story, stype, recommendation, rationale, timeframe, conviction):
+    """Full-width strategy card with left gold border."""
+    conv_hex = "3DB87A" if conviction == "high" else "C89A3D" if conviction == "medium" else "525268"
+
+    inner = []
+    inner.append(Paragraph(
+        f'<font color="#{conv_hex}" size="7.5" fontName="Helvetica-Bold">'
+        f'{stype.upper()}  ·  {conviction.upper() if conviction else ""} CONVICTION'
+        f'{"  ·  " + timeframe if timeframe else ""}</font>',
+        _ps("st", fontSize=7.5, fontName="Helvetica-Bold",
+            textColor=colors.HexColor(f"#{conv_hex}"), spaceAfter=4)))
+    if recommendation:
+        inner.append(Paragraph(str(recommendation),
+            _ps("sr", fontSize=9.5, fontName="Helvetica-Bold",
+                textColor=LIGHT, leading=13, spaceAfter=5)))
+    if rationale:
+        inner.append(Paragraph(str(rationale),
+            _ps("sb", fontSize=8.5, textColor=TEXT2, leading=13, spaceAfter=0)))
+
+    card = Table([[inner]], colWidths=[USABLE],
+                 style=TableStyle([
+                     ("BACKGROUND",    (0, 0), (-1, -1), BG2),
+                     ("BOX",           (0, 0), (-1, -1), 0.5, BORDER2),
+                     ("LINEBEBRE",     (0, 0), (0, -1),  3,   GREEN),
+                     ("TOPPADDING",    (0, 0), (-1, -1), 10),
+                     ("BOTTOMPADDING", (0, 0), (-1, -1), 10),
+                     ("LEFTPADDING",   (0, 0), (-1, -1), 14),
+                     ("RIGHTPADDING",  (0, 0), (-1, -1), 12),
+                     ("VALIGN",        (0, 0), (-1, -1), "TOP"),
+                 ]))
+    story.append(KeepTogether([card, Spacer(1, 5)]))
+
+
+def _page_canvas(canvas, doc):
+    """Draws the dark background, gold top bar and footer on every page."""
+    canvas.saveState()
+    w, h = PAGE_W, PAGE_H
+
+    # Dark background
+    canvas.setFillColor(BG)
+    canvas.rect(0, 0, w, h, fill=1, stroke=0)
+
+    # Gold top bar
+    canvas.setFillColor(GOLD)
+    canvas.rect(0, h - 3, w, 3, fill=1, stroke=0)
+
+    # Footer line
+    canvas.setStrokeColor(BORDER)
+    canvas.setLineWidth(0.4)
+    canvas.line(L_MAR, B_MAR - 4, w - R_MAR, B_MAR - 4)
+
+    # Footer text
+    canvas.setFillColor(MUTED)
+    canvas.setFont("Helvetica", 6.5)
+    footer = (f"Daily Market Brief  ·  {DATE_FR}  ·  "
+              f"yfinance · FRED · Finnhub · Gmail  ·  Claude AI  ·  Not investment advice")
+    canvas.drawString(L_MAR, B_MAR - 10, footer)
+
+    # Page number
+    canvas.drawRightString(w - R_MAR, B_MAR - 10, f"{doc.page}")
+
+    canvas.restoreState()
 
 
 def generate_pdf(report: dict) -> bytes:
     print("[4/6] Génération du PDF...")
     buffer = BytesIO()
-    doc = SimpleDocTemplate(buffer, pagesize=A4,
-                            leftMargin=14*mm, rightMargin=14*mm,
-                            topMargin=12*mm, bottomMargin=12*mm)
-
-    S_H1 = ps("h1", fontName="Helvetica-Bold", fontSize=18, textColor=GOLD_LT, spaceAfter=2)
-    S_H2 = ps("h2", fontName="Helvetica-Bold", fontSize=13, textColor=GOLD, spaceAfter=4, spaceBefore=10)
-    S_H3 = ps("h3", fontName="Helvetica-Bold", fontSize=10, textColor=LIGHT, spaceAfter=3, spaceBefore=6)
-    S_BD = ps("bd", fontSize=8.5, textColor=TEXT, leading=13)
-    S_BL = ps("bl", fontSize=8.5, textColor=LIGHT, fontName="Helvetica-Bold")
-    S_MU = ps("mu", fontSize=7.5, textColor=MUTED, leading=12)
-    S_GD = ps("gd", fontName="Helvetica-Bold", fontSize=8, textColor=GREEN)
-    S_RD = ps("rd", fontName="Helvetica-Bold", fontSize=8, textColor=RED)
+    doc = SimpleDocTemplate(
+        buffer, pagesize=A4,
+        leftMargin=L_MAR, rightMargin=R_MAR,
+        topMargin=T_MAR, bottomMargin=B_MAR + 6,
+    )
 
     story = []
 
-    def sec(num: int, title: str):
-        story.append(Spacer(1, 8))
-        story.append(Paragraph(
-            f'<font color="#B8965A" size="7">0{num} ·</font>  <font size="13" color="#D4AF7A">{title}</font>',
-            ps("sh", fontName="Helvetica-Bold", fontSize=13, textColor=GOLD_LT, spaceBefore=8, spaceAfter=4)))
-        story.append(hr(GOLD, 0.5))
-
-    # ── HEADER
-    temp = report.get("market_temperature", "neutral")
-    temp_label = {"risk_on": "RISK ON ▲", "risk_off": "RISK OFF ▼", "neutral": "NEUTRAL ◆"}.get(temp, temp.upper())
-    temp_color = GREEN if temp == "risk_on" else RED if temp == "risk_off" else YELLOW
+    # ── COVER HEADER ──────────────────────────────────────────────────────────
+    temp      = report.get("market_temperature", "neutral")
+    temp_lbl  = {"risk_on": "RISK ON ▲", "risk_off": "RISK OFF ▼", "neutral": "NEUTRAL ◆"}.get(temp, temp.upper())
+    temp_hex  = "3DB87A" if temp == "risk_on" else "C85454" if temp == "risk_off" else "C89A3D"
 
     story.append(Paragraph(
-        f'<font color="#B8965A" size="8" fontName="Helvetica">DAILY MARKET BRIEF · INTELLIGENCE NOTE</font>',
-        ps("sup", fontSize=8, textColor=GOLD, fontName="Helvetica", spaceAfter=4)))
-    story.append(Paragraph(
-        f'<font size="22" color="#E8E8F4" fontName="Helvetica-Bold">Daily <font color="#B8965A">Market</font> Brief</font>',
-        ps("title", fontSize=22, textColor=LIGHT, fontName="Helvetica-Bold", spaceAfter=2)))
-    story.append(Paragraph(f'{DATE_FR}', ps("date", fontSize=9, textColor=MUTED, spaceAfter=2)))
-    story.append(Paragraph(f'Market Regime: <font color="#{("3DB87A" if temp=="risk_on" else "C85454" if temp=="risk_off" else "C89A3D")}">{temp_label}</font> — {report.get("market_temperature_label", "")}',
-                            ps("regime", fontSize=9, fontName="Helvetica-Bold", textColor=MUTED, spaceAfter=4)))
-    story.append(hr(GOLD, 1))
+        'DAILY MARKET BRIEF  ·  INTELLIGENCE NOTE',
+        _ps("kicker", fontSize=7.5, fontName="Helvetica-Bold", textColor=GOLD,
+            spaceBefore=0, spaceAfter=6, leading=10)))
 
-    # S1 - Overview
+    story.append(Paragraph(
+        f'Daily <font color="#B8965A"><i>Market</i></font> Brief',
+        _ps("maintitle", fontSize=28, fontName="Helvetica-Bold", textColor=LIGHT,
+            leading=32, spaceAfter=4)))
+
+    story.append(Paragraph(
+        f'{DATE_FR}',
+        _ps("dateline", fontSize=9, textColor=MUTED, spaceAfter=4, leading=12)))
+
+    story.append(Paragraph(
+        f'<font color="#{temp_hex}" fontName="Helvetica-Bold">{temp_lbl}</font>'
+        f'  <font color="#525268">·</font>  '
+        f'<font color="#9898B0">{report.get("market_temperature_label", "")}</font>',
+        _ps("regime", fontSize=9, textColor=TEXT2, leading=12, spaceAfter=6)))
+
+    story.append(_hr(GOLD, w=1.2, before=2, after=14))
+
+    # ── SECTION 1 — Overview ──────────────────────────────────────────────────
     s1 = report.get("section1_overview", {})
-    sec(1, s1.get("title", "Global Market Overview & Sentiment"))
+    _section_header(story, 1, s1.get("title", "Global Market Overview & Sentiment"))
+
     if s1.get("headline"):
-        story.append(Paragraph(s1["headline"], S_BL))
-        story.append(Spacer(1, 4))
+        story.append(Paragraph(str(s1["headline"]),
+            _ps("headline", fontSize=11, fontName="Helvetica-Bold",
+                textColor=LIGHT, leading=15, spaceAfter=8)))
+
     for para in s1.get("paragraphs", []):
-        story.append(Paragraph(str(para), S_BD))
-        story.append(Spacer(1, 3))
+        story.append(Paragraph(str(para),
+            _ps("body", fontSize=8.5, textColor=TEXT2, leading=14, spaceAfter=8)))
 
-    # S2 - Macro
+    # ── SECTION 2 — Macro ─────────────────────────────────────────────────────
     s2 = report.get("section2_macro", {})
-    sec(2, s2.get("title", "Macro-Economic Environment"))
-    for para in s2.get("paragraphs", []):
-        story.append(Paragraph(str(para), S_BD))
-        story.append(Spacer(1, 3))
+    _section_header(story, 2, s2.get("title", "Macro-Economic Environment"))
 
-    # S3 - Equities
+    for para in s2.get("paragraphs", []):
+        story.append(Paragraph(str(para),
+            _ps("macrobody", fontSize=8.5, textColor=TEXT2, leading=14, spaceAfter=8)))
+
+    # ── SECTION 3 — Equities ──────────────────────────────────────────────────
     story.append(PageBreak())
     s3 = report.get("section3_equities", {})
-    sec(3, s3.get("title", "Equity Markets"))
+    _section_header(story, 3, s3.get("title", "Equity Markets"))
 
     # Indices table
     indices = s3.get("indices", [])
     if indices:
-        data_tbl = [["Index", "Price", "1D Chg", "YTD"]]
+        hdr = [
+            Paragraph("Index",  _ps("th", fontSize=7.5, fontName="Helvetica-Bold", textColor=GOLD)),
+            Paragraph("Close",  _ps("th", fontSize=7.5, fontName="Helvetica-Bold", textColor=GOLD)),
+            Paragraph("1D Chg", _ps("th", fontSize=7.5, fontName="Helvetica-Bold", textColor=GOLD)),
+            Paragraph("YTD",    _ps("th", fontSize=7.5, fontName="Helvetica-Bold", textColor=GOLD)),
+        ]
+        rows = [hdr]
         for idx in indices:
-            chg = idx.get("change", "")
-            chg_color = GREEN if str(chg).startswith("+") else RED
-            data_tbl.append([
-                idx.get("name", ""), idx.get("value", ""),
-                Paragraph(chg, ps("ic", fontSize=8, textColor=chg_color, fontName="Helvetica-Bold")),
-                idx.get("ytd", "—")
+            chg = idx.get("change", "—")
+            ytd = idx.get("ytd", "—")
+            chg_hex = "3DB87A" if str(chg).startswith("+") else "C85454" if str(chg).startswith("-") else "525268"
+            ytd_hex = "3DB87A" if str(ytd).startswith("+") else "C85454" if str(ytd).startswith("-") else "525268"
+            rows.append([
+                Paragraph(idx.get("name", ""), _ps("idxn", fontSize=8.5, textColor=LIGHT, fontName="Helvetica-Bold")),
+                Paragraph(str(idx.get("value", "—")), _ps("idxv", fontSize=8.5, textColor=TEXT)),
+                Paragraph(str(chg), _ps("idxc", fontSize=8.5, textColor=colors.HexColor(f"#{chg_hex}"), fontName="Helvetica-Bold")),
+                Paragraph(str(ytd), _ps("idxy", fontSize=8.5, textColor=colors.HexColor(f"#{ytd_hex}"))),
             ])
-        story.append(tbl(data_tbl, [55*mm, 28*mm, 25*mm, 25*mm]))
-        story.append(Spacer(1, 6))
+        story.append(_tbl(rows, [72*mm, 38*mm, 28*mm, 25*mm], v_pad=6))
+        story.append(Spacer(1, 14))
 
-    # Sector heatmap
+    # Sector performance table
     sectors = s3.get("sector_performance", [])
     if sectors:
-        story.append(Paragraph("Sector Performance", S_H3))
-        sec_rows = [["Sector", "Change", "Sector", "Change"]]
-        for i in range(0, len(sectors), 2):
+        story.append(Paragraph("US Sector Performance",
+            _ps("subtl", fontSize=9, fontName="Helvetica-Bold", textColor=GOLD,
+                spaceAfter=6, spaceBefore=0)))
+        # Two columns side by side
+        half = (len(sectors) + 1) // 2
+        left  = sectors[:half]
+        right = sectors[half:]
+        sec_hdr = [
+            Paragraph("Sector", _ps("sh", fontSize=7.5, fontName="Helvetica-Bold", textColor=GOLD)),
+            Paragraph("Daily",  _ps("sh", fontSize=7.5, fontName="Helvetica-Bold", textColor=GOLD)),
+            Paragraph("Sector", _ps("sh", fontSize=7.5, fontName="Helvetica-Bold", textColor=GOLD)),
+            Paragraph("Daily",  _ps("sh", fontSize=7.5, fontName="Helvetica-Bold", textColor=GOLD)),
+        ]
+        sec_rows = [sec_hdr]
+        for i in range(half):
             row = []
-            for j in range(2):
-                if i + j < len(sectors):
-                    s = sectors[i + j]
-                    chg = s.get("change", "")
-                    c = GREEN if s.get("direction") == "up" else RED
-                    row.extend([s.get("sector", ""),
-                                Paragraph(chg, ps("sc", fontSize=8, textColor=c, fontName="Helvetica-Bold"))])
+            for item in [left[i] if i < len(left) else None,
+                         right[i] if i < len(right) else None]:
+                if item:
+                    chg = item.get("change", "—")
+                    c_hex = "3DB87A" if item.get("direction") == "up" else "C85454" if item.get("direction") == "down" else "525268"
+                    row += [
+                        Paragraph(item.get("sector", ""), _ps("sn", fontSize=8.5, textColor=TEXT)),
+                        Paragraph(str(chg), _ps("sc", fontSize=8.5,
+                            textColor=colors.HexColor(f"#{c_hex}"), fontName="Helvetica-Bold")),
+                    ]
                 else:
-                    row.extend(["", ""])
+                    row += [Paragraph("", _ps("e")), Paragraph("", _ps("e"))]
             sec_rows.append(row)
-        story.append(tbl(sec_rows, [45*mm, 22*mm, 45*mm, 22*mm]))
-        story.append(Spacer(1, 6))
+        story.append(_tbl(sec_rows, [52*mm, 28*mm, 52*mm, 28*mm], v_pad=5))
+        story.append(Spacer(1, 14))
 
-    # Regional analysis
-    for region_key, region_label in [("us", "United States"), ("europe", "Europe"), ("asia", "Asia")]:
-        reg = s3.get(region_key, {})
+    # Regional cards
+    for key, label in [("us", "United States"), ("europe", "Europe"), ("asia", "Asia")]:
+        reg = s3.get(key, {})
         if reg:
-            dir_color = GREEN if reg.get("direction") == "bullish" else RED if reg.get("direction") == "bearish" else YELLOW
-            story.append(Paragraph(
-                f'<font color="#{("3DB87A" if reg.get("direction")=="bullish" else "C85454" if reg.get("direction")=="bearish" else "C89A3D")}">{region_label} — {reg.get("direction", "").upper()}</font>',
-                ps("rl", fontSize=9, fontName="Helvetica-Bold", textColor=dir_color, spaceAfter=2)))
-            if reg.get("headline"):
-                story.append(Paragraph(reg["headline"], S_BL))
-            story.append(Paragraph(str(reg.get("body", "")), S_BD))
-            if reg.get("key_driver"):
-                story.append(Paragraph(f"→ Key driver: {reg['key_driver']}", S_MU))
-            if reg.get("risk"):
-                story.append(Paragraph(f"⚠ Risk: {reg['risk']}", ps("rsk", fontSize=7.5, textColor=RED, spaceAfter=5)))
-            story.append(Spacer(1, 4))
+            _region_card(story,
+                label=label,
+                direction=reg.get("direction", "neutral"),
+                headline=reg.get("headline", ""),
+                body=reg.get("body", ""),
+                key_driver=reg.get("key_driver", ""),
+                risk=reg.get("risk", ""),
+            )
 
-    # S4 - Fixed Income
+    # ── SECTION 4 — Fixed Income ──────────────────────────────────────────────
     story.append(PageBreak())
     s4 = report.get("section4_fixed_income", {})
-    sec(4, s4.get("title", "Fixed Income & Rates"))
+    _section_header(story, 4, s4.get("title", "Fixed Income & Rates"))
+
     yc = s4.get("yield_curve", {})
     if yc:
-        yc_data = [["Tenor", "Yield", "Spread 2s10s"]]
-        yc_data.append(["US 2Y", f"{yc.get('us_2y', '—')}%", yc.get("spread_2_10", "—")])
-        yc_data.append(["US 10Y", f"{yc.get('us_10y', '—')}%", ""])
-        yc_data.append(["US 30Y", f"{yc.get('us_30y', '—')}%", ""])
-        story.append(tbl(yc_data, [40*mm, 30*mm, 63*mm]))
-        story.append(Spacer(1, 4))
-        if yc.get("interpretation"):
-            story.append(Paragraph(yc["interpretation"], S_BD))
-    story.append(Paragraph(str(s4.get("narrative", "")), S_BD))
+        # Yield curve table
+        yc_hdr = [
+            Paragraph("Tenor",         _ps("t", fontSize=7.5, fontName="Helvetica-Bold", textColor=GOLD)),
+            Paragraph("Yield",         _ps("t", fontSize=7.5, fontName="Helvetica-Bold", textColor=GOLD)),
+            Paragraph("2s10s Spread",  _ps("t", fontSize=7.5, fontName="Helvetica-Bold", textColor=GOLD)),
+        ]
+        spread_val = yc.get("spread_2_10", "—")
+        spread_hex = "3DB87A" if str(spread_val).lstrip("+").startswith("+") or (not str(spread_val).startswith("-")) else "C85454"
+        yc_rows = [
+            yc_hdr,
+            [Paragraph("US 2Y",  _ps("t", fontSize=8.5, textColor=TEXT)),
+             Paragraph(f"{yc.get('us_2y','—')}%", _ps("t", fontSize=8.5, textColor=GOLD_LT, fontName="Helvetica-Bold")),
+             Paragraph(str(spread_val), _ps("t", fontSize=8.5, textColor=colors.HexColor(f"#{spread_hex}"), fontName="Helvetica-Bold"))],
+            [Paragraph("US 10Y", _ps("t", fontSize=8.5, textColor=TEXT)),
+             Paragraph(f"{yc.get('us_10y','—')}%", _ps("t", fontSize=8.5, textColor=GOLD_LT, fontName="Helvetica-Bold")),
+             Paragraph("", _ps("e"))],
+            [Paragraph("US 30Y", _ps("t", fontSize=8.5, textColor=TEXT)),
+             Paragraph(f"{yc.get('us_30y','—')}%", _ps("t", fontSize=8.5, textColor=GOLD_LT, fontName="Helvetica-Bold")),
+             Paragraph("", _ps("e"))],
+        ]
+        story.append(_tbl(yc_rows, [45*mm, 40*mm, 78*mm], v_pad=6))
+        story.append(Spacer(1, 10))
 
-    # S5 - FX
+        if yc.get("interpretation"):
+            story.append(Paragraph(str(yc["interpretation"]),
+                _ps("yci", fontSize=8.5, textColor=TEXT2, leading=14, spaceAfter=8)))
+
+    story.append(Paragraph(str(s4.get("narrative", "")),
+        _ps("fibody", fontSize=8.5, textColor=TEXT2, leading=14, spaceAfter=8)))
+
+    # ── SECTION 5 — Forex ─────────────────────────────────────────────────────
     s5 = report.get("section5_forex", {})
-    sec(5, s5.get("title", "Foreign Exchange"))
+    _section_header(story, 5, s5.get("title", "Foreign Exchange"))
+
     dxy = s5.get("dxy", {})
     if dxy:
+        dxy_chg = str(dxy.get("change", ""))
+        dxy_hex = "3DB87A" if dxy_chg.startswith("+") else "C85454"
         story.append(Paragraph(
-            f'DXY: <font fontName="Helvetica-Bold">{dxy.get("value", "")}</font> '
-            f'<font color="{"#3DB87A" if str(dxy.get("change","")).startswith("+") else "#C85454"}">{dxy.get("change", "")}</font> — {dxy.get("interpretation", "")}',
-            ps("dxy", fontSize=9, textColor=TEXT, spaceAfter=6)))
-    story.append(Paragraph(str(s5.get("narrative", "")), S_BD))
-    story.append(Spacer(1, 4))
+            f'<font fontName="Helvetica-Bold" color="#D4AF7A">DXY</font>  '
+            f'<font fontName="Helvetica-Bold" color="#E8E8F4">{dxy.get("value","—")}</font>  '
+            f'<font fontName="Helvetica-Bold" color="#{dxy_hex}">{dxy_chg}</font>'
+            f'<font color="#525268">  ·  </font>'
+            f'<font color="#9898B0">{str(dxy.get("interpretation",""))[:220]}</font>',
+            _ps("dxy", fontSize=8.5, textColor=TEXT2, leading=13, spaceAfter=8)))
 
-    # FX pairs table
+    story.append(Paragraph(str(s5.get("narrative", "")),
+        _ps("fxnarr", fontSize=8.5, textColor=TEXT2, leading=14, spaceAfter=10)))
+
     pairs = s5.get("pairs", [])
     if pairs:
-        fx_data = [["Pair", "Rate", "Chg", "Support", "Resist.", "Analysis"]]
+        fx_hdr = [
+            Paragraph("Pair",       _ps("t", fontSize=7.5, fontName="Helvetica-Bold", textColor=GOLD)),
+            Paragraph("Rate",       _ps("t", fontSize=7.5, fontName="Helvetica-Bold", textColor=GOLD)),
+            Paragraph("Daily",      _ps("t", fontSize=7.5, fontName="Helvetica-Bold", textColor=GOLD)),
+            Paragraph("Support",    _ps("t", fontSize=7.5, fontName="Helvetica-Bold", textColor=GOLD)),
+            Paragraph("Resistance", _ps("t", fontSize=7.5, fontName="Helvetica-Bold", textColor=GOLD)),
+            Paragraph("Analysis",   _ps("t", fontSize=7.5, fontName="Helvetica-Bold", textColor=GOLD)),
+        ]
+        fx_rows = [fx_hdr]
         for p in pairs:
-            chg = p.get("change", "")
-            c = GREEN if str(chg).startswith("+") else RED
-            fx_data.append([
-                Paragraph(p.get("pair", ""), ps("fp", fontSize=8, fontName="Helvetica-Bold", textColor=LIGHT)),
-                p.get("value", ""),
-                Paragraph(chg, ps("fc", fontSize=8, textColor=c, fontName="Helvetica-Bold")),
-                p.get("support", "—"), p.get("resistance", "—"),
-                Paragraph(str(p.get("analysis", ""))[:200], ps("fa", fontSize=7, textColor=TEXT))
+            chg = str(p.get("change", "—"))
+            c_hex = "3DB87A" if chg.startswith("+") else "C85454" if chg.startswith("-") else "525268"
+            analysis_text = str(p.get("analysis", ""))
+            # Keep analysis under ~300 chars so the cell doesn't explode
+            if len(analysis_text) > 300:
+                analysis_text = analysis_text[:297] + "…"
+            fx_rows.append([
+                Paragraph(p.get("pair","—"), _ps("fp", fontSize=8.5, fontName="Helvetica-Bold", textColor=LIGHT)),
+                Paragraph(str(p.get("value","—")), _ps("fv", fontSize=8.5, textColor=TEXT)),
+                Paragraph(chg, _ps("fc", fontSize=8.5, fontName="Helvetica-Bold",
+                    textColor=colors.HexColor(f"#{c_hex}"))),
+                Paragraph(str(p.get("support","—")), _ps("fs", fontSize=8, textColor=GREEN)),
+                Paragraph(str(p.get("resistance","—")), _ps("fr", fontSize=8, textColor=RED)),
+                Paragraph(analysis_text, _ps("fa", fontSize=7.5, textColor=TEXT2, leading=11)),
             ])
-        story.append(tbl(fx_data, [18*mm, 18*mm, 14*mm, 14*mm, 14*mm, 55*mm]))
+        story.append(_tbl(fx_rows, [18*mm, 18*mm, 14*mm, 14*mm, 14*mm, 85*mm], v_pad=6))
 
-    # S6 - Commodities
+    # ── SECTION 6 — Commodities ───────────────────────────────────────────────
     story.append(PageBreak())
     s6 = report.get("section6_commodities", {})
-    sec(6, s6.get("title", "Commodities & Alternative Assets"))
-    story.append(Paragraph(str(s6.get("narrative", "")), S_BD))
-    story.append(Spacer(1, 4))
+    _section_header(story, 6, s6.get("title", "Commodities & Alternative Assets"))
+
+    story.append(Paragraph(str(s6.get("narrative", "")),
+        _ps("commbody", fontSize=8.5, textColor=TEXT2, leading=14, spaceAfter=10)))
 
     items = s6.get("items", [])
     if items:
-        cmd_data = [["Commodity", "Price", "Change", "Analysis"]]
+        cmd_hdr = [
+            Paragraph("Asset",   _ps("t", fontSize=7.5, fontName="Helvetica-Bold", textColor=GOLD)),
+            Paragraph("Price",   _ps("t", fontSize=7.5, fontName="Helvetica-Bold", textColor=GOLD)),
+            Paragraph("Unit",    _ps("t", fontSize=7.5, fontName="Helvetica-Bold", textColor=GOLD)),
+            Paragraph("Daily",   _ps("t", fontSize=7.5, fontName="Helvetica-Bold", textColor=GOLD)),
+            Paragraph("Context", _ps("t", fontSize=7.5, fontName="Helvetica-Bold", textColor=GOLD)),
+        ]
+        cmd_rows = [cmd_hdr]
         for it in items:
-            chg = it.get("change", "")
-            c = GREEN if str(chg).startswith("+") else RED
-            cmd_data.append([
-                Paragraph(f'{it.get("name", "")} <font color="#525268" size="7">{it.get("unit", "")}</font>',
-                          ps("cn", fontSize=8.5, textColor=LIGHT, fontName="Helvetica-Bold")),
-                it.get("value", ""),
-                Paragraph(chg, ps("cc", fontSize=8, textColor=c, fontName="Helvetica-Bold")),
-                Paragraph(str(it.get("analysis", ""))[:180], ps("ca", fontSize=7.5, textColor=TEXT))
+            chg = str(it.get("change", "—"))
+            c_hex = "3DB87A" if chg.startswith("+") else "C85454" if chg.startswith("-") else "525268"
+            analysis = str(it.get("analysis", ""))
+            if len(analysis) > 250:
+                analysis = analysis[:247] + "…"
+            cmd_rows.append([
+                Paragraph(str(it.get("name","—")), _ps("cn", fontSize=8.5, fontName="Helvetica-Bold", textColor=LIGHT)),
+                Paragraph(str(it.get("value","—")), _ps("cv", fontSize=8.5, textColor=TEXT)),
+                Paragraph(str(it.get("unit","—")), _ps("cu", fontSize=7.5, textColor=MUTED)),
+                Paragraph(chg, _ps("cc", fontSize=8.5, fontName="Helvetica-Bold",
+                    textColor=colors.HexColor(f"#{c_hex}"))),
+                Paragraph(analysis, _ps("ca", fontSize=7.5, textColor=TEXT2, leading=11)),
             ])
-        story.append(tbl(cmd_data, [28*mm, 20*mm, 16*mm, 69*mm]))
+        story.append(_tbl(cmd_rows, [28*mm, 22*mm, 16*mm, 18*mm, 79*mm], v_pad=6))
 
-    # S7 - Positioning
+    # ── SECTION 7 — Positioning ───────────────────────────────────────────────
+    _section_header(story, 7, report.get("section7_positioning", {}).get("title", "Market Positioning & Sentiment"))
     s7 = report.get("section7_positioning", {})
-    sec(7, s7.get("title", "Market Positioning & Sentiment"))
-    story.append(Paragraph(str(s7.get("narrative", "")), S_BD))
+    story.append(Paragraph(str(s7.get("narrative", "")),
+        _ps("posbody", fontSize=8.5, textColor=TEXT2, leading=14, spaceAfter=8)))
 
-    # S8 - Email Intelligence
+    # ── SECTION 8 — Email Intelligence ────────────────────────────────────────
+    story.append(PageBreak())
     s8 = report.get("section8_email_intelligence", {})
-    sec(8, s8.get("title", "Email Intelligence — Daily Market Watch"))
-    story.append(Paragraph(str(s8.get("summary", "")), S_BD))
-    for story_item in s8.get("key_stories", []):
-        rel = story_item.get("relevance", "medium")
-        c = GREEN if rel == "high" else YELLOW
-        story.append(Spacer(1, 4))
-        story.append(Paragraph(
-            f'<font color="{"#3DB87A" if rel=="high" else "#C89A3D"}" fontName="Helvetica-Bold" size="8">● {story_item.get("title", "")}</font>',
-            ps("si", fontSize=8, spaceAfter=2)))
-        story.append(Paragraph(str(story_item.get("body", "")), S_BD))
+    _section_header(story, 8, s8.get("title", "Email Intelligence — Daily Market Watch"))
 
-    # S9 - Synthesis
+    story.append(Paragraph(str(s8.get("summary", "")),
+        _ps("emailsum", fontSize=8.5, textColor=TEXT2, leading=14, spaceAfter=10)))
+
+    for item in s8.get("key_stories", []):
+        rel     = item.get("relevance", "medium")
+        rel_hex = "3DB87A" if rel == "high" else "C89A3D"
+        inner   = [
+            Paragraph(
+                f'<font color="#{rel_hex}" fontName="Helvetica-Bold" size="8">'
+                f'{"▲ HIGH" if rel=="high" else "● MEDIUM"}</font>  '
+                f'<font color="#E8E8F4" fontName="Helvetica-Bold" size="9">{item.get("title","")}</font>',
+                _ps("et", fontSize=9, textColor=LIGHT, leading=13, spaceAfter=5)),
+            Paragraph(str(item.get("body","")),
+                _ps("eb", fontSize=8.5, textColor=TEXT2, leading=13, spaceAfter=0)),
+        ]
+        card = Table([[inner]], colWidths=[USABLE],
+            style=TableStyle([
+                ("BACKGROUND",    (0,0),(-1,-1), BG2),
+                ("BOX",           (0,0),(-1,-1), 0.5, BORDER2),
+                ("LINEBEBRE",     (0,0),(0,-1),  3, colors.HexColor(f"#{rel_hex}")),
+                ("TOPPADDING",    (0,0),(-1,-1), 10),
+                ("BOTTOMPADDING", (0,0),(-1,-1), 10),
+                ("LEFTPADDING",   (0,0),(-1,-1), 12),
+                ("RIGHTPADDING",  (0,0),(-1,-1), 12),
+                ("VALIGN",        (0,0),(-1,-1), "TOP"),
+            ]))
+        story.append(KeepTogether([card, Spacer(1, 6)]))
+
+    # ── SECTION 9 — Synthesis ─────────────────────────────────────────────────
     story.append(PageBreak())
     s9 = report.get("section9_synthesis", {})
-    sec(9, s9.get("title", "Daily Synthesis & Outlook"))
+    _section_header(story, 9, s9.get("title", "Daily Synthesis & Outlook"))
 
-    regime = s9.get("regime", "")
-    regime_label = {"risk_on": "RISK ON", "risk_off": "RISK OFF", "transition": "TRANSITION",
-                    "stagflation": "STAGFLATION", "goldilocks": "GOLDILOCKS"}.get(regime, regime.upper())
+    regime     = s9.get("regime", "neutral")
+    regime_lbl = {"risk_on":"RISK ON","risk_off":"RISK OFF","transition":"TRANSITION",
+                  "stagflation":"STAGFLATION","goldilocks":"GOLDILOCKS"}.get(regime, regime.upper())
+    regime_hex = "3DB87A" if regime in ("risk_on","goldilocks") else "C85454" if regime in ("risk_off","stagflation") else "C89A3D"
+
     story.append(Paragraph(
-        f'Regime: <font fontName="Helvetica-Bold" color="#B8965A">{regime_label}</font>',
-        ps("rm", fontSize=9, textColor=MUTED, spaceAfter=4)))
-    story.append(Paragraph(str(s9.get("global_view", "")), S_BD))
-    story.append(Spacer(1, 6))
+        f'<font color="#{regime_hex}" fontName="Helvetica-Bold">{regime_lbl}</font>',
+        _ps("reglbl", fontSize=10, fontName="Helvetica-Bold",
+            textColor=colors.HexColor(f"#{regime_hex}"), spaceAfter=8)))
+
+    story.append(Paragraph(str(s9.get("global_view", "")),
+        _ps("gview", fontSize=8.5, textColor=TEXT2, leading=14, spaceAfter=12)))
 
     if s9.get("tomorrow_watch"):
-        story.append(Paragraph("📅 Tomorrow — Key Events & Data", S_H3))
-        story.append(Paragraph(str(s9["tomorrow_watch"]), S_BD))
-        story.append(Spacer(1, 6))
+        story.append(Paragraph("Tomorrow — Key Events & Data to Watch",
+            _ps("twlbl", fontSize=9, fontName="Helvetica-Bold", textColor=GOLD,
+                spaceAfter=6, spaceBefore=4)))
+        story.append(_hr(BORDER, w=0.4, before=0, after=6))
+        story.append(Paragraph(str(s9["tomorrow_watch"]),
+            _ps("tw", fontSize=8.5, textColor=TEXT2, leading=14, spaceAfter=12)))
 
-    # Strategy cards
+    story.append(Paragraph("Recommended Strategies",
+        _ps("stlbl", fontSize=9, fontName="Helvetica-Bold", textColor=GOLD,
+            spaceAfter=6, spaceBefore=4)))
+    story.append(_hr(BORDER, w=0.4, before=0, after=8))
+
     for st in s9.get("strategy", []):
-        conviction = st.get("conviction", "medium")
-        c = GREEN if conviction == "high" else YELLOW if conviction == "medium" else MUTED
-        story.append(Paragraph(
-            f'<font fontName="Helvetica-Bold" size="7" color="{"#3DB87A" if conviction=="high" else "#C89A3D" if conviction=="medium" else "#525268"}">{st.get("type", "").upper()} · {conviction.upper()} CONVICTION</font>',
-            ps("stt", fontSize=7, spaceAfter=2)))
-        story.append(Paragraph(str(st.get("recommendation", "")), S_BL))
-        story.append(Paragraph(str(st.get("rationale", "")), S_BD))
-        story.append(hr(GREEN, 0.3))
+        _strategy_card(story,
+            stype=st.get("type", ""),
+            recommendation=st.get("recommendation", ""),
+            rationale=st.get("rationale", ""),
+            timeframe=st.get("timeframe", ""),
+            conviction=st.get("conviction", "medium"),
+        )
 
-    # Footer
-    story.append(Spacer(1, 10))
-    story.append(Paragraph(
-        f"Daily Market Brief · Generated {DATE_FR} · Sources: yfinance, FRED, Finnhub, Gmail (Daily Market Watch) · Claude AI Analysis · Not investment advice",
-        ps("ft", fontSize=6.5, textColor=MUTED, alignment=TA_CENTER)))
-    story.append(hr(GOLD, 0.5))
-
-    doc.build(story)
+    doc.build(story, onFirstPage=_page_canvas, onLaterPages=_page_canvas)
     pdf = buffer.getvalue()
     print(f"[4/6] ✅ PDF généré ({len(pdf) // 1024} KB)")
     return pdf
