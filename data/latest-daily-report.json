@@ -1,24 +1,24 @@
 {
   "report": {
-    "date": "Thursday 23 April 2026",
-    "generated_at": "2026-04-23T02:04:04.721515+00:00",
-    "market_temperature": "neutral",
-    "market_temperature_label": "US tech leads a bifurcated session as Wall Street shrugs off European softness and a blistering crude oil surge complicates the inflation calculus.",
+    "date": "Friday 24 April 2026",
+    "generated_at": "2026-04-24T02:04:40.369887+00:00",
+    "market_temperature": "risk_off",
+    "market_temperature_label": "Defensive rotation dominates Friday's tape as tech selloff, crude surge, and VIX creep signal mounting late-cycle anxiety ahead of the weekend.",
     "section1_overview": {
       "title": "Global Market Overview & Sentiment",
-      "headline": "Tech-driven US rebound and an explosive crude oil surge fracture the global risk narrative, leaving investors to reconcile growth optimism at home with European PMI deterioration and a Brent crude print above $100.",
+      "headline": "Late-cycle defensives command Friday's session as technology capitulates, crude spikes above $97, and gold holds near $4,711 — a textbook risk-off rotation within a still-positive YTD trend.",
       "paragraphs": [
-        "Thursday's session delivered a profoundly split tape. US equities powered higher, with the S&P 500 adding +1.05% to close at 7,137.9 and the NASDAQ 100 surging +1.73% to 26,937.28 — a clear signal that big-cap technology remains the dominant engine of domestic equity returns. The Dow Jones, a more industrials-heavy gauge, lagged at +0.69% to 49,490.03, while the Russell 2000 added a modest +0.74% to 2,785.38, suggesting breadth participation but without the conviction of a clean risk-on sweep. The VIX fell -2.92% to 18.92, pulling back from recent anxiety, yet the index's YTD gain of +30.39% speaks to the cumulative stress that remains embedded in option markets. Simultaneously, European indices retreated — the CAC 40 fell -1.11% to 8,156.43, EuroStoxx 50 slid -0.54% to 5,906.22, and even the more resilient DAX dipped -0.31% to 24,194.9 — as flash PMI data signaled a more meaningful deceleration in activity than consensus had priced. Asian markets were equally uninspiring, with the Hang Seng off -1.02% and the Nikkei 225 edging down -0.40%.",
-        "The macro catalyst chain is multi-layered. The most striking single development is the extraordinary surge in energy prices: Brent crude rocketed +10.22% to $102.39/bbl while WTI rose +4.84% to $93.57/bbl — a move of that magnitude in a single session suggests either a sharp geopolitical supply shock or a very large short squeeze, and the asymmetric gap between WTI and Brent moves (+10.22% vs +4.84%) implies the disruption is concentrated on seaborne, internationally-traded grades. This energy spike immediately complicates the Federal Reserve's path: inflation, already elevated as evidenced by the CPI index level of 330.293 (up from 327.460 previously), receives a fresh upward push from a $100+ Brent print. Market participants now face the uncomfortable arithmetic of stronger-than-feared energy costs colliding with a Fed still parked at 3.64% on fed funds.",
-        "What the consensus appears to be missing is the internal contradiction within today's tape. Markets are simultaneously celebrating technology earnings momentum (NASDAQ +1.73%) while ignoring the second-order stagflationary implication of a +10.22% Brent move. The sector rotation confirms this tension: Technology (+1.54%), Materials (+1.43%), and Energy (+1.04%) outperformed, while cyclical bellwethers like Industrials (-0.90%), Financials (-0.55%), and Real Estate (-0.59%) sold off — a pattern more consistent with a late-cycle, inflation-aware rotation than a clean risk-on rally. The bear case that consensus is underweighting: a durable energy shock above $100 Brent re-anchors inflation expectations higher precisely when the Fed has just stabilized rates, leaving no easy exit valve."
+        "Friday's session delivered a nuanced but unmistakably defensive market message. The S&P 500 shed -0.41% to close at 7,108.4, the NASDAQ 100 underperformed at -0.57% to 26,782.62, and the Russell 2000 gave back -0.37% to 2,775.1 — yet the week-over-week picture remains constructive with 5-day gains of +1.22%, +2.21%, and +2.26% respectively. The day's sector map could not have been clearer in its message: Utilities surged +2.42% (XLU to $46.09), Consumer Staples +1.76% (XLP to $83.48), and Industrials +1.62% (XLI to $174.07), while Technology collapsed -1.29% (XLK to $155.84) and Financials dropped -0.79% (XLF to $51.80). This is canonical late-session, end-of-week de-risking, with capital migrating from growth-sensitive and rate-sensitive sectors toward yield-like defensives and energy-adjacent plays. The VIX ticked up +2.12% on the day to 19.31 — still not in panic territory, but the +33.08% YTD reading is a persistent amber signal that the floor beneath this equity rally is shakier than headline index levels suggest.",
+        "The macro catalyst chain driving today's tone is a combination of energy price re-acceleration and a modest but meaningful backup in the long end of the Treasury curve. WTI crude surged +2.91% to $97.30/bbl and Brent rose +3.17% to $106.70/bbl — a move large enough to re-introduce stagflationary overtones into the narrative just as equity markets were beginning to price in a more benign monetary path. The 10-year Treasury yield rose +2.9bp to 4.323% while the 2-year held flat at 3.595%, steepening the 2s10s curve to +72.8bp — a positively-sloped curve that historically signals growth optimism, but in today's context is better read as the market pricing in sustained inflation premium at the long end. The DXY edged marginally higher to 98.802 (+0.09%), providing modest additional pressure on USD-denominated risk assets and EM equities, the latter evidenced by EEM's steep -1.63% decline.",
+        "What the consensus appears to be missing today is the disaggregation between headline index resilience and the brutal internal rotation occurring beneath the surface. ARKK's -3.20% crash to $76.50 signals that speculative growth capital is being unwound aggressively, even as the S&P 500's -0.41% loss looks benign. The Real Estate sector's +1.06% gain (XLRE to $43.96) alongside Utilities is a tell — these sectors are being bought not for growth but as duration proxies now that long yields have paused their ascent near 4.32%. The market is effectively pricing two conflicting realities simultaneously: a steepening curve suggesting growth, and a defensive rotation suggesting deceleration. The resolution of this tension, likely through Q1 GDP data or the next inflation print, will determine whether this week's equity bounce was a genuine re-rating or merely a bear-market rally consolidation."
       ]
     },
     "section2_macro": {
       "title": "Macro-Economic Environment",
       "paragraphs": [
-        "The FRED data presents a macro environment that is superficially benign but harbors material latent risks. The fed funds rate stands at 3.64% as of March 1, 2026, unchanged from the prior reading, confirming the Fed is in a sustained pause. Unemployment has actually improved modestly to 4.3% from 4.4% — not a recessionary signal but not tight enough to generate wage acceleration. CPI, measured by the index level, came in at 330.293 versus 327.460 previously, a move that translates to continued above-target inflation running at an uncomfortable pace. M2 money supply stands at $22,667.3 billion as of February 2026, up from $22,469.1 billion — a meaningful $198 billion sequential expansion that signals monetary conditions are not as tight as the policy rate implies. Credit spreads from FRED at 2.85% (down marginally from 2.87%) suggest corporate credit markets remain relatively sanguine, a point of fragile comfort given today's energy price shock.",
-        "These macro forces transmit into asset prices through several distinct channels. The elevated-but-stable fed funds rate at 3.64% has anchored the front end of the yield curve, with the 2-year Treasury yielding 3.595% — notably below the policy rate, implying the market is already pricing modest easing over the intermediate horizon. This rate structure supports equity multiples, particularly for long-duration growth assets like technology, explaining the NASDAQ's outperformance. The M2 expansion, meanwhile, sustains liquidity in risk assets despite the ostensibly restrictive policy stance. However, today's energy surge is a non-trivial inflationary impulse: a $100+ Brent price, if sustained, adds directly to headline CPI and compresses real consumer purchasing power, which would ultimately flow through to consumer-facing sectors.",
-        "The equilibrium-breaking scenario I would flag explicitly: if Brent crude sustains above $100/bbl for even 3-4 weeks, the next CPI print will almost certainly re-accelerate, forcing the Fed to abandon any latent easing bias and potentially pivot hawkish. In that scenario, the 10-year yield, currently at 4.294%, would likely test 4.50-4.75%, repricing equity multiples sharply lower — particularly for the technology sector which has been the engine of today's gains. The combination of a growth scare (confirmed by softening European PMIs) and a re-acceleration in inflation would represent a true stagflationary shock, the hardest macro environment to navigate from a portfolio perspective."
+        "The FRED macro data paints a picture of a late-cycle economy that remains technically functional but increasingly fragile at the margins. The CPI YoY index reading of 330.293 (up from a prior 327.460) confirms that inflationary pressures have not been fully extinguished — the sequential acceleration in the price level index is precisely the kind of data point that keeps the Federal Reserve in a cautious-to-hawkish posture even as growth signals soften. The fed funds rate sits at 3.64% as of March 1, 2026 — unchanged from the prior reading — suggesting the Fed has reached a conditional plateau rather than a genuine easing pivot. Unemployment ticked down to 4.3% from 4.4%, a marginal improvement that prevents the labor market from becoming a unambiguous dovish catalyst; the Fed cannot credibly cut rates aggressively when unemployment is still falling. M2 money supply at $22,667.3 billion (up from $22,469.1 billion) reflects a modest re-liquefaction of the financial system, which is consistent with the 5-day equity rally but also a potential second-round inflation risk if that liquidity velocity accelerates.",
+        "These macro forces transmit into today's asset prices through several well-defined channels. The still-elevated inflation backdrop (CPI index 330.293) combined with rising crude oil prices creates a reflexive loop: energy-driven inflation re-anchors long-end yields at elevated levels, which compresses equity duration (hurting high-multiple tech stocks most acutely), while simultaneously validating the outperformance of energy (+0.78%, XLE to $56.98) and other real-asset proxies. The credit spread environment remains relatively contained at 2.84% (down marginally from 2.85%), suggesting that corporate bond markets have not yet broken — but HYG's -0.22% and LQD's -0.36% declines today indicate that investment grade bonds are absorbing the duration pain more than high yield, consistent with the modest 10-year yield backup of +2.9bp.",
+        "The scenario most likely to break the current equilibrium is a supply shock in energy markets sustaining crude above $100/bbl — a threshold not yet breached but now within striking distance. Brent at $106.70 is already through that psychological barrier. If energy prices remain elevated for two to three more weeks, the PCE deflator reading due in May risks an upside surprise, forcing the Fed to explicitly shelve any residual dovish rhetoric and potentially triggering a repricing of risk assets that is qualitatively different from the orderly rotation we see today. A secondary circuit-breaker would be a deterioration in credit spreads above 3.25%, which would signal that corporate funding stress is beginning to impair economic activity — at 2.84%, we are not there yet, but the trajectory bears daily monitoring."
       ]
     },
     "section3_equities": {
@@ -26,351 +26,351 @@
       "indices": [
         {
           "name": "S&P 500",
-          "value": "7137.9",
-          "change": "+1.05%",
-          "ytd": "+4.07%"
+          "value": "7108.4",
+          "change": "-0.41%",
+          "ytd": "+3.64%"
         },
         {
           "name": "NASDAQ 100",
-          "value": "26937.28",
-          "change": "+1.73%",
-          "ytd": "+6.87%"
+          "value": "26782.62",
+          "change": "-0.57%",
+          "ytd": "+6.25%"
         },
         {
           "name": "Dow Jones",
-          "value": "49490.03",
-          "change": "+0.69%",
-          "ytd": "+2.29%"
+          "value": "49310.32",
+          "change": "-0.36%",
+          "ytd": "+1.92%"
         },
         {
           "name": "Russell 2000",
-          "value": "2785.38",
-          "change": "+0.74%",
-          "ytd": "+11.05%"
+          "value": "2775.1",
+          "change": "-0.37%",
+          "ytd": "+10.64%"
         },
         {
           "name": "VIX",
-          "value": "18.92",
-          "change": "-2.92%",
+          "value": "19.31",
+          "change": "+2.12%",
           "ytd": "N/A"
         },
         {
           "name": "CAC 40",
-          "value": "8156.43",
-          "change": "-1.11%",
-          "ytd": "-0.47%"
+          "value": "8227.32",
+          "change": "+0.75%",
+          "ytd": "+0.39%"
         },
         {
           "name": "DAX",
-          "value": "24194.9",
-          "change": "-0.31%",
-          "ytd": "-1.40%"
+          "value": "24155.45",
+          "change": "-0.16%",
+          "ytd": "-1.56%"
         },
         {
           "name": "EuroStoxx 50",
-          "value": "5906.22",
-          "change": "-0.54%",
-          "ytd": "-0.29%"
+          "value": "5894.73",
+          "change": "-0.27%",
+          "ytd": "-0.49%"
         },
         {
           "name": "Nikkei 225",
-          "value": "59331.37",
-          "change": "-0.40%",
-          "ytd": "+14.47%"
+          "value": "59546.35",
+          "change": "+0.63%",
+          "ytd": "+14.88%"
         },
         {
           "name": "Hang Seng",
-          "value": "25896.13",
-          "change": "-1.02%",
-          "ytd": "-1.68%"
+          "value": "25718.41",
+          "change": "-0.76%",
+          "ytd": "-2.35%"
         },
         {
           "name": "Shanghai",
-          "value": "4097.33",
-          "change": "-0.22%",
-          "ytd": "+1.84%"
+          "value": "4068.05",
+          "change": "-0.65%",
+          "ytd": "+1.11%"
         }
       ],
       "sector_performance": [
         {
           "sector": "Technology",
-          "change": "+1.54%",
-          "direction": "up",
-          "change_num": 1.54
+          "change": "-1.29%",
+          "direction": "down",
+          "change_num": -1.29
         },
         {
           "sector": "Financials",
-          "change": "-0.55%",
+          "change": "-0.79%",
           "direction": "down",
-          "change_num": -0.55
+          "change_num": -0.79
         },
         {
           "sector": "Energy",
-          "change": "+1.04%",
+          "change": "+0.78%",
           "direction": "up",
-          "change_num": 1.04
+          "change_num": 0.78
         },
         {
           "sector": "Healthcare",
-          "change": "-0.14%",
+          "change": "-0.23%",
           "direction": "down",
-          "change_num": -0.14
+          "change_num": -0.23
         },
         {
           "sector": "Industrials",
-          "change": "-0.90%",
-          "direction": "down",
-          "change_num": -0.9
+          "change": "+1.62%",
+          "direction": "up",
+          "change_num": 1.62
         },
         {
           "sector": "Consumer Discr.",
-          "change": "-0.37%",
+          "change": "-0.75%",
           "direction": "down",
-          "change_num": -0.37
+          "change_num": -0.75
         },
         {
           "sector": "Materials",
-          "change": "+1.43%",
-          "direction": "up",
-          "change_num": 1.43
+          "change": "-0.15%",
+          "direction": "down",
+          "change_num": -0.15
         },
         {
           "sector": "Utilities",
-          "change": "-0.36%",
-          "direction": "down",
-          "change_num": -0.36
+          "change": "+2.42%",
+          "direction": "up",
+          "change_num": 2.42
         },
         {
           "sector": "Real Estate",
-          "change": "-0.59%",
-          "direction": "down",
-          "change_num": -0.59
+          "change": "+1.06%",
+          "direction": "up",
+          "change_num": 1.06
         },
         {
           "sector": "Comm. Services",
-          "change": "+0.25%",
-          "direction": "up",
-          "change_num": 0.25
+          "change": "-0.52%",
+          "direction": "down",
+          "change_num": -0.52
         },
         {
           "sector": "Cons. Staples",
-          "change": "+0.13%",
+          "change": "+1.76%",
           "direction": "up",
-          "change_num": 0.13
+          "change_num": 1.76
         }
       ],
       "us": {
-        "headline": "US equities rally on tech and energy leadership, but the sector scorecard reveals a deeply bifurcated market rather than a broad-based risk-on advance.",
-        "body": "The S&P 500's +1.05% gain to 7,137.9 masks an extraordinary internal divergence. Only five of eleven GICS sectors finished in positive territory, with Technology (+1.54%), Materials (+1.43%), Energy (+1.04%), Comm. Services (+0.25%), and Cons. Staples (+0.13%) doing all the heavy lifting. Industrials (-0.90%) was the notable laggard — a sector that should benefit from domestic capex but is being repriced lower as the energy shock raises input costs and compresses margins. Financials (-0.55%) also retreated, which is counterintuitive given a steepening yield curve (2s10s at +69.9bp) that should benefit net interest income; the sell-off there likely reflects credit quality concerns as energy costs bite into consumer and corporate balance sheets. The NASDAQ 100's +1.73% advance to 26,937.28 is being driven by mega-cap technology earnings momentum — the ARKK innovation ETF's +1.58% gain confirms speculative appetite is alive in growth-duration names. The Russell 2000's more modest +0.74% at 2,785.38 (despite its remarkable +11.05% YTD outperformance) suggests small-cap strength is consolidating rather than accelerating. From a flow perspective, QQQ ETF gained +1.18% versus SPY's +0.60%, the divergence confirming that today's bid is concentrated in high-beta technology, not broad market rotation. The VIX's decline to 18.92 (-2.92%) provides comfort, but at 18.92, it is by no means signaling complacency — this remains an options market pricing meaningful uncertainty into the coming weeks.",
-        "direction": "bullish",
-        "key_driver": "Mega-cap technology earnings momentum and a WTI/Brent surge driving Energy sector outperformance provide the twin engines of today's US equity advance.",
-        "risk": "A sustained Brent crude price above $100/bbl re-accelerates CPI and forces a hawkish Fed pivot that would reprice technology multiples sharply lower."
+        "headline": "S&P 500 slips -0.41% to 7,108.4 in a Friday session defined not by index-level moves but by a dramatic internal rotation away from growth and into defensives and real assets.",
+        "body": "The US equity market's Friday session was defined by a schism between the headline print and the underlying flow dynamics. The S&P 500's -0.41% decline to 7,108.4 masks a 390-basis-point spread between the best-performing sector (Utilities, +2.42%) and the worst (Technology, -1.29%) — one of the widest intraday sector dispersions of recent months. The NASDAQ 100's -0.57% decline to 26,782.62, combined with ARKK's brutal -3.20% drop to $76.50, signals that speculative and momentum capital is being liquidated into the weekend. QQQ's -0.62% underperformance relative to the broader SPY (-0.28%) confirms the tech-specific nature of the selling pressure. From a factor perspective, the day was a clear rotation from high-beta growth to low-beta dividend and real-asset proxies: Utilities (XLU +2.42%), Consumer Staples (XLP +1.76%), Industrials (XLI +1.62%), and Real Estate (XLRE +1.06%) all outperformed sharply, a rotation consistent with portfolios repositioning for a higher-for-longer rate environment and/or an economic soft patch. The Russell 2000 at 2,775.1 (-0.37%) held up better than NASDAQ on a relative basis, but its +10.64% YTD gain — the strongest of any major US index — creates a valuation vulnerability if small-cap earnings disappoint. The Dow Jones at 49,310.32 (-0.36%) benefits from its value/industrial composition, which explains its relative resilience. Friday's flow data, particularly the HYG -0.22% and LQD -0.36% declines, suggest that bond markets are providing no offsetting tailwind for equities today — a potentially concerning signal for next week's open.",
+        "direction": "bearish",
+        "key_driver": "Technology sector liquidation (-1.29%) and defensive sector rotation into Utilities (+2.42%) and Staples (+1.76%) driven by crude oil's surge and duration risk repricing.",
+        "risk": "ARKK's -3.20% collapse to $76.50 signals speculative froth unwinding that could spill over into mega-cap growth names if next week's earnings disappoint."
       },
       "europe": {
-        "headline": "European equities retreat as flash PMI data signals activity deceleration, with the CAC 40 leading losses and continental markets unable to find a foothold against a strengthening USD.",
-        "body": "European markets closed broadly lower on Thursday, with the CAC 40 falling -1.11% to 8,156.43, underperforming its regional peers and now sitting fractionally negative YTD at -0.47%. The EuroStoxx 50 shed -0.54% to 5,906.22 and is also in marginally negative territory for the year at -0.29%. The DAX showed relative resilience, down only -0.31% to 24,194.9, though its -1.40% YTD underperformance against the S&P 500's +4.07% gain illustrates the persistent valuation headwind for European industrials in an energy-cost-elevated environment. The flash PMI data was the primary catalyst: Germany's manufacturing PMI flash was expected to slip to 51.3 from 52.2, while the UK's manufacturing PMI was forecast below 50 at 49.9, moving into contraction territory. UK services PMI was also expected at exactly 50.0, a knife-edge reading. The EUR/USD barely moved at 1.1712 (+0.02%), suggesting the EUR remains well-supported at these levels despite the growth scare, which paradoxically limits the ECB's room to maneuver — a strong currency compounds export headwinds. The FTSE 100 was the relative outperformer among European peers, falling only -0.21% to 10,476.5, supported by its heavy energy and materials weighting which benefited from today's commodity surge.",
-        "direction": "bearish",
-        "key_driver": "Flash PMI deceleration signals the European growth impulse is fading faster than expected, particularly in manufacturing-heavy Germany and France.",
-        "risk": "EUR strength above 1.17 combined with $100+ energy costs creates a stagflationary squeeze on European corporate margins, particularly in autos and chemicals."
+        "headline": "European markets split along domestic versus export fault lines: CAC 40 outperforms at +0.75% while DAX slips -0.16% as crude-cost concerns weigh on German industrials.",
+        "body": "European equity markets closed Friday in a divergent fashion that reveals important structural differences in national index composition. The CAC 40 rose +0.75% to 8,227.32, buoyed by its heavier weighting toward luxury goods and energy-adjacent names that benefit from a weak dollar and rising commodity prices. The DAX, by contrast, edged down -0.16% to 24,155.45 — its -1.56% YTD underperformance reflects Germany's acute sensitivity to energy input costs, which are now being re-pressured by Brent's +3.17% surge to $106.70. The EuroStoxx 50 declined -0.27% to 5,894.73, with its YTD flat-to-negative (-0.49%) performance standing in stark contrast to US small-caps' +10.64% gain. The FTSE 100 fell -0.19% to 10,457.0, though its +5.08% YTD performance reflects the UK market's commodity and financial sector weighting rather than tech exposure. Today's scheduled release of Germany's Ifo Business Climate (estimate 85.5 vs prior 86.4) — if confirmed — would mark a further deterioration in corporate confidence, which aligns with the DAX's structural underperformance. The EUR/USD holding at 1.1692 provides a mild headwind for European exporters, while ECB rate expectations remain more dovish than Fed pricing, creating a supportive but fragile floor under European risk assets.",
+        "direction": "neutral",
+        "key_driver": "Crude oil surge disproportionately hurts energy-import-heavy Germany (DAX -0.16%) while benefiting commodity-oriented CAC 40 (+0.75%) names — a structural rather than cyclical divergence.",
+        "risk": "Ifo Business Climate deterioration (estimate 85.5 from prior 86.4) combined with persistent Brent crude above $100 could tip German industrial activity data into contraction territory, pressuring DAX further."
       },
       "asia": {
-        "headline": "Asian markets closed mixed-to-lower, with the Hang Seng's -1.02% decline reflecting renewed China growth concerns, while the Nikkei's modest dip obscures its remarkable +14.47% YTD outperformance.",
-        "body": "Asian equity markets offered little to cheer on Thursday. The Hang Seng fell -1.02% to 25,896.13, now down -1.68% YTD — a persistent underperformer that reflects a combination of China growth uncertainty, geopolitical risk premium, and ongoing property sector stress. The Shanghai Composite was more contained at -0.22% to 4,097.33, with a YTD gain of +1.84% suggesting mainland investors remain cautiously positioned. The USD/CNY at 6.8237 (-0.05% on the day) shows the yuan is modestly strengthening, likely a deliberate PBOC signal to manage capital flow dynamics. The Nikkei 225 dipped -0.40% to 59,331.37, a minor retreat for an index up an extraordinary +14.47% YTD — by far the strongest performer among major global indices in this data set. Japan's upcoming inflation data (due 23:30 local time) is the key catalyst to watch; the prior reading of 1.3% YoY will be tested against a rising energy price environment. USD/JPY at 159.416 (-0.04%) remains at levels that have historically drawn BOJ intervention commentary, and the divergence between a strong Nikkei and a weak yen is a tension that cannot persist indefinitely. Emerging markets showed modest green via EEM ETF's +1.25% gain, providing a counterpoint to the developed Asia malaise.",
-        "direction": "neutral",
-        "key_driver": "Japan's exceptional YTD equity performance driven by yen weakness and corporate governance reform remains the dominant Asian story, though near-term inflation data presents a BOJ policy risk.",
-        "risk": "A BOJ pivot toward tighter policy triggered by rising Japanese inflation data would strengthen the yen sharply, reversing the carry trade that has partially fueled Nikkei gains."
+        "headline": "Asia divides sharply: Nikkei 225 surges +0.63% to 59,546.35 on yen carry resilience while Hang Seng drops -0.76% and Shanghai sheds -0.65% on renewed China risk appetite concerns.",
+        "body": "Asian markets delivered a telling divergence on Friday that encapsulates the region's bifurcated macro reality. The Nikkei 225 rose +0.63% to 59,546.35, extending its extraordinary +14.88% YTD leadership — by far the strongest performing major global index. The Nikkei's outperformance continues to be anchored by the USD/JPY carry trade at 159.769 (+0.05%), which keeps Japanese export earnings inflated in yen terms and makes Japanese equities structurally attractive to foreign capital. However, the BOJ's implicit tolerance of yen weakness near the 160 threshold is a double-edged sword: any sudden intervention or hawkish pivot would unwind carry positions violently and expose the Nikkei's valuation to sharp mean-reversion. The Hang Seng's -0.76% decline to 25,718.41 and its -2.56% 5-day loss (worst weekly performer globally) reflects persistent institutional skepticism about China's ability to deliver sustained reflation without structural reform. Shanghai's -0.65% to 4,068.05 further confirms that domestic Chinese liquidity conditions are insufficient to offset external demand headwinds and property sector drag. EEM's -1.63% decline — the largest single-day EM ETF loss in today's data — signals that EM equities broadly are being sold, with the USD's modest DXY firmness (+0.09%) providing an additional headwind for dollar-denominated EM assets.",
+        "direction": "bearish",
+        "key_driver": "Nikkei's yen-carry-driven +14.88% YTD gain is the regional standout, but deteriorating China sentiment (-0.76% Hang Seng, -0.65% Shanghai) and EM capital outflows (EEM -1.63%) dominate the regional risk narrative.",
+        "risk": "A BOJ policy surprise or yen intervention near 160.00 could trigger a violent unwinding of the yen carry trade, simultaneously crashing the Nikkei and creating dislocations in USD-funded global risk positions."
       }
     },
     "section4_fixed_income": {
       "title": "Fixed Income & Rates",
       "yield_curve": {
         "us_2y": "3.595%",
-        "us_10y": "4.294%",
-        "us_30y": "4.902%",
-        "spread_2_10": "+69.9bp",
-        "interpretation": "The US yield curve presents a positively sloped, normally shaped structure with the 2s10s spread at +69.9bp — a marked improvement from the deeply inverted readings that characterized much of 2023-2024 and a signal that bond markets are pricing a growth-positive, easing-cycle environment. However, the long end bears watching: the 30-year at 4.902% is approaching the psychologically critical 5.00% threshold, and with Brent crude above $100/bbl today, any re-acceleration in inflation expectations would push term premium higher at the long end while potentially keeping the front end anchored if the Fed remains on hold. The 2-year at 3.595% sits meaningfully below the fed funds rate of 3.64%, implying the market still prices some residual easing over the next 12-18 months — a pricing that becomes vulnerable if energy-driven inflation proves durable."
+        "us_10y": "4.323%",
+        "us_30y": "4.918%",
+        "spread_2_10": "+72.8bp",
+        "interpretation": "The US yield curve remains positively sloped at +72.8bp (2s10s), a configuration that traditionally signals economic expansion expectations. However, today's session saw the long end bear-steepen — 10Y rose +2.9bp to 4.323% and 30Y rose +1.6bp to 4.918% while the 2Y held flat at 3.595% — a move that reflects the market pricing in sustained inflation premium at the long end rather than genuine growth optimism. The 30Y at 4.918% approaching the 5% psychological threshold is an important technical level that, if breached, would likely catalyze further selling in long-duration equity names and REITs. The steepening dynamic is consistent with a market beginning to question the Fed's ability to engineer a soft landing in the face of re-accelerating energy prices — a bear steepener is typically less benign for equities than a bull steepener despite the nominally positive curve shape."
       },
-      "narrative": "Today's US Treasury market was notably orderly given the macro noise. The 2-year yield fell a fractional -0.3bp to 3.595%, while the 10-year ticked up a modest +0.2bp to 4.294% and the 30-year added +0.4bp to 4.902% — a mild bear steepening at the long end that is consistent with inflation-risk premium being re-priced modestly higher. The FRED data confirms the 10-year yield has moved from 4.26% to 4.30% in recent weeks, an incremental but directionally meaningful backup. Credit spreads from FRED at 2.85% (down from 2.87%) remain well-contained, suggesting that despite the equity sector rotation and the energy shock, corporate credit markets have not yet begun to price meaningful default risk — a sign that the credit cycle is intact but not complacent. The TLT long-bond ETF's +0.01% gain to $86.74 reflects near-perfect stasis in long-duration bonds, as bulls and bears in Treasuries neutralize one another between the growth-optimism impulse (equity rally) and the inflation-caution impulse (energy surge). LQD's +0.19% advance in investment-grade credit, alongside HYG's +0.06% gain in high yield, confirms the credit bid remains intact — spreads are tight, refinancing risk is low, and the hunt for yield continues. The risk scenario that could break this equilibrium: a Brent print sustained above $100 forces a repricing of Fed expectations from 'one cut by year-end' to 'no cuts, potential hike,' which would push the 2-year sharply higher and flatten or re-invert the curve, devastating both rate-sensitive equity sectors and leveraged credit."
+      "narrative": "The fixed income picture today is one of quiet but consequential pressure building at the long end of the curve. The 10-year Treasury yield's +2.9bp move to 4.323% on a day when equity markets are selling off is notable precisely because it inverts the typical flight-to-safety narrative — Treasuries are not being bought as a safe haven today, they are being mildly sold (or at least not bid), suggesting the market views the primary risk as inflationary rather than deflationary. TLT's -0.22% decline to $86.55 confirms this: long bond investors are not finding safety in duration today. The FRED credit spread reading at 2.84% (slightly tighter than the prior 2.85%) provides some comfort that credit markets have not broken, but HYG's -0.22% and LQD's -0.36% declines suggest that the secondary market for corporate bonds is absorbing the duration pain. The fed funds rate at 3.64% — unchanged from the prior reading — combined with the 2Y yield at 3.595% implies that the 2-year Treasury yield is now effectively trading below the effective fed funds rate, a nuanced technical configuration that historically precedes either a rate cut expectation increase or a risk-off re-pricing in short duration. M2 growth to $22,667.3 billion provides a modest liquidity buffer against a full credit crunch, but the velocity of that liquidity is the critical unknown. The most important fixed income dynamic to monitor is whether the 10Y yield's approach toward 4.40-4.50% triggers systematic de-leveraging by risk-parity funds, which would create a negative feedback loop between bonds and equities that the current VIX level of 19.31 may not be fully pricing."
     },
     "section5_forex": {
       "title": "Foreign Exchange",
       "dxy": {
-        "value": "98.593",
-        "change": "+0.20%",
-        "interpretation": "The DXY edged higher by +0.20% to 98.593, a modest strengthening that reflects the dollar's residual safe-haven appeal alongside the energy shock's inflationary implications for the US economy — higher energy prices, paradoxically, can support the dollar by attracting yield-seeking capital when other central banks face more acute growth headwinds. At 98.59, the DXY remains below the 100 psychological level, a zone that has historically marked the boundary between dollar strength and structural dollar weakness cycles. The DXY's inability to sustain above 100 despite elevated US yields suggests persistent structural selling of USD by sovereigns and reserve managers — a theme worth monitoring as de-dollarization narratives gain institutional traction."
+        "value": "98.802",
+        "change": "+0.09%",
+        "interpretation": "The DXY's fractional +0.09% gain to 98.802 on Friday is deceptively quiet given the volatility in underlying crosses. The index remains below the psychologically significant 100.00 threshold, a level that — if breached — would begin to exert meaningful headwinds on dollar-denominated commodity prices, EM debt service costs, and US multinational earnings. Today's mild USD firmness reflects competing forces: the backup in long-end Treasury yields is modestly supportive, but the absence of safe-haven dollar demand despite equity weakness signals that global investors are not yet in full risk-off panic mode. The DXY's position in the high 90s represents an equilibrium zone where neither bulls nor bears have a decisive macro catalyst, and the next meaningful directional move will likely be determined by the trajectory of Fed rate cut pricing over the next four to six weeks."
       },
-      "narrative": "The global FX market on Thursday operated in a relatively narrow range for most major pairs, which is itself informative: despite an extraordinary +10.22% Brent surge, a tech-driven US equity rally, and soft European PMIs, currency volatility was subdued. This cross-asset calm in FX while commodities moved explosively suggests that either the energy shock is viewed as transient (options markets are not pricing sustained commodity volatility into FX), or that central bank reserve activity is actively dampening moves. EUR/USD at 1.1712 (+0.02%) is impressively stable — the euro is holding gains against a modestly stronger dollar, which implies the market is not yet extrapolating European PMI weakness into ECB dovishness. GBP/USD at 1.3499 (-0.02%) is similarly anchored, with the market focused on tomorrow's UK retail sales data. USD/JPY at 159.416 (-0.04%) remains the most geopolitically sensitive pair: at 159-160, the pair is approaching levels where BOJ verbal intervention has historically been deployed. The Australian dollar at 0.7157 (-0.03%) is remarkably resilient despite the softer China growth backdrop, arguably supported by commodity export revenues as copper (+0.71%) and energy prices surge. The USD/CNY at 6.8237 (-0.05%) points to measured yuan appreciation, consistent with PBOC managed stability. Rate differentials continue to dominate directional positioning: the US 2s10s at +69.9bp versus a flatter-to-inverted European curve structure maintains the fundamental case for dollar support, though the carry trade dynamic is increasingly crowded.",
+      "narrative": "Global FX markets on Friday were characterized by a conspicuous absence of dramatic moves despite the volatility in other asset classes — a divergence that itself carries analytical information. The most significant underlying dynamic is the widening rate differential between the US (fed funds at 3.64%, 10Y at 4.323%) and Europe (ECB in progressive easing mode), which should theoretically support the dollar but is being partially offset by the dollar's structural premium compression as global reserve managers diversify. USD/JPY at 159.769 (+0.05%) continues to hover in the intervention danger zone — the BOJ and Ministry of Finance have historically defended the 160.00 level aggressively, and the market's willingness to push above it reflects either a belief that Japanese authorities have softened their stance or a deliberate test of the intervention threshold ahead of the weekend. AUD/USD's -0.03% dip to 0.7131 is consistent with the slight commodity complex softness ex-energy (copper -0.23%, silver -0.99%), while USD/CNY's +0.13% rise to 6.8347 confirms gradual yuan depreciation pressure — a dynamic that adds another layer of complexity to already-fraught US-China trade relations. The carry trade remains the dominant FX theme: high-yielding EM currencies like BRL (USD/BRL flat at 5.0245) and MXN (USD/MXN +0.03% to 17.4168) are holding up relatively well against a backdrop of EM equity weakness, suggesting that FX carry is still being funded but selectively in higher-quality EM credits.",
       "pairs": [
         {
           "pair": "EUR/USD",
-          "value": "1.1712",
-          "change": "+0.02%",
-          "change_num": 0.02,
+          "value": "1.1692",
+          "change": "+0.03%",
+          "change_num": 0.03,
           "direction": "up",
-          "analysis": "EUR/USD's near-flat +0.02% move to 1.1712 reflects a market caught between two competing forces: the eurozone growth scare from today's soft flash PMI readings (pushing euro lower) and the structural dollar weakness narrative (supporting euro). The ECB faces a difficult communications challenge — with inflation still above target and energy costs re-accelerating via today's Brent surge, any dovish pivot to support growth would risk EUR credibility. At 1.1712, the pair is sitting comfortably above the 1.15 structural support zone, and positioning data suggests speculative accounts are long euros — a crowded trade that is vulnerable to a reversal if US macro data re-accelerates.",
-          "support": "1.1550",
-          "resistance": "1.1850"
+          "analysis": "EUR/USD's +0.03% nudge to 1.1692 reflects a near-perfectly balanced tug-of-war between a modestly firm DXY and the euro's resilience driven by the CAC 40's outperformance (+0.75%). The ECB's dovish lean relative to the Fed creates a structural headwind for the euro, but eurozone inflation stickiness is limiting the pace of ECB cuts, preventing a sharp EUR depreciation. Today's Ifo Business Climate data (estimate 85.5 vs prior 86.4) — if released as expected — would apply mild additional downward pressure on EUR/USD by reinforcing German economic fragility. The pair's current positioning near 1.1692 is likely to remain rangebound absent a significant macro catalyst.",
+          "support": "1.1600",
+          "resistance": "1.1780"
         },
         {
           "pair": "GBP/USD",
-          "value": "1.3499",
-          "change": "-0.02%",
-          "change_num": -0.02,
-          "direction": "down",
-          "analysis": "Cable at 1.3499 (-0.02%) is essentially flat, with the pair in a holding pattern ahead of tomorrow's UK retail sales (est. +0.2% MoM vs prior -0.4%) and the flash services PMI which is forecast at exactly 50.0 — a knife-edge neutral reading. The Bank of England's trajectory is heavily data-dependent, and a downside miss on either retail sales or services PMI tomorrow would likely push GBP/USD below 1.34 as traders price an accelerated BoE easing path. The UK's heavy dependence on energy imports means the Brent surge above $102 is a direct negative for UK terms of trade, adding a subtle structural headwind to sterling.",
-          "support": "1.3300",
-          "resistance": "1.3650"
+          "value": "1.3472",
+          "change": "+0.03%",
+          "change_num": 0.03,
+          "direction": "up",
+          "analysis": "Cable's +0.03% tick to 1.3472 is modest but consistent with sterling's broader resilience in 2026, supported by the UK's commodities-heavy FTSE 100 (+5.08% YTD) and the Bank of England's cautious approach to rate cuts relative to the ECB. UK Retail Sales MoM data (estimate +0.2% vs prior -0.4%) released today at 06:00 GMT — if it met expectations — would represent a meaningful rebound and provide a near-term floor for GBP. However, the UK's persistent current account deficit and exposure to European growth slowdown cap the upside for sterling at current levels.",
+          "support": "1.3380",
+          "resistance": "1.3550"
         },
         {
           "pair": "USD/JPY",
-          "value": "159.416",
-          "change": "-0.04%",
-          "change_num": -0.04,
-          "direction": "down",
-          "analysis": "USD/JPY at 159.416 remains near the 160 threshold that has historically triggered BOJ intervention rhetoric and, on one prior occasion, direct market intervention. The pair's -0.04% marginal decline today reflects mild yen firming, possibly driven by pre-announcement positioning ahead of tonight's Japan inflation data. If Japanese CPI surprises to the upside relative to the prior 1.3% reading, the market will immediately price a hawkish BOJ response, potentially driving USD/JPY sharply toward 155. The asymmetry is clear: yen upside is catalyzed by domestic inflation or BOJ action, while yen downside from here faces the implicit ceiling of intervention risk.",
-          "support": "155.000",
-          "resistance": "160.500"
+          "value": "159.769",
+          "change": "+0.05%",
+          "change_num": 0.05,
+          "direction": "up",
+          "analysis": "USD/JPY at 159.769 (+0.05%) is the most geopolitically and financially consequential FX level in global markets right now. The pair is within 25 pips of the 160.00 threshold that triggered BOJ/MoF intervention rhetoric in prior episodes. The yen's continued weakness reflects the interest rate differential (US 10Y at 4.323% vs JGB 10Y well below 1.5%) and the persistence of the carry trade. A surprise BOJ rate hike or coordinated intervention announcement over the weekend would constitute a major tail risk for Monday's open across global markets, given the scale of yen-funded carry positions in US equities and EM debt.",
+          "support": "158.50",
+          "resistance": "160.00"
         },
         {
           "pair": "USD/CHF",
-          "value": "0.7846",
-          "change": "+0.01%",
-          "change_num": 0.01,
-          "direction": "up",
-          "analysis": "USD/CHF at 0.7846 (+0.01%) is essentially unchanged in a session that should have seen more CHF safe-haven demand given geopolitical uncertainty and energy price volatility. The Swiss franc's relative stability suggests the SNB's comfort zone is being tested — a stronger CHF threatens Swiss export competitiveness, and the SNB has historically intervened to cap franc appreciation. The near-zero daily change reflects equilibrium between modest dollar firming (DXY +0.20%) and latent safe-haven demand for the franc.",
-          "support": "0.7750",
+          "value": "0.7862",
+          "change": "+0.00%",
+          "change_num": 0.0,
+          "direction": "flat",
+          "analysis": "USD/CHF's flat session at 0.7862 reflects the Swiss franc's dual-use status as both a safe-haven currency and a low-yielder used as a carry funding vehicle. In a day where risk-off signals are present but not acute (VIX at 19.31 rather than above 25), CHF demand is muted — investors are rotating within equities rather than exiting to cash or safe havens. The SNB's continued resistance to excessive CHF appreciation keeps USD/CHF from declining sharply even in risk-off episodes, providing a floor near current levels.",
+          "support": "0.7800",
           "resistance": "0.7950"
         },
         {
           "pair": "AUD/USD",
-          "value": "0.7157",
+          "value": "0.7131",
           "change": "-0.03%",
           "change_num": -0.03,
           "direction": "down",
-          "analysis": "AUD/USD at 0.7157 (-0.03%) holds near recent highs despite the softer Chinese growth signal from Shanghai's -0.22% decline and Hang Seng's -1.02% selloff. The Aussie's resilience is attributable to the commodity complex: copper's +0.71% gain and the broader energy surge elevate Australia's export revenue expectations, providing fundamental support. RBA policy remains a secondary driver; the next catalyst would be Australian employment data or a significant shift in China's demand indicators. Above 0.72, AUD/USD would signal a genuine commodity-driven breakout — below 0.70, a China growth scare would dominate.",
-          "support": "0.7000",
-          "resistance": "0.7250"
+          "analysis": "AUD/USD's -0.03% dip to 0.7131 reflects the mild pressure from a softer industrial metals complex (copper -0.23%) and China growth uncertainty (Shanghai -0.65%, Hang Seng -0.76%), given Australia's structural economic linkage to Chinese commodity demand. The AUD is partially insulated by the global energy price surge (WTI +2.91%), as Australia is a significant LNG exporter, but the dominant China demand signal is negative at the margin. A deterioration in Chinese PMI or trade data next week would be the primary downside catalyst for the pair.",
+          "support": "0.7080",
+          "resistance": "0.7200"
         },
         {
           "pair": "USD/CNY",
-          "value": "6.8237",
-          "change": "-0.05%",
-          "change_num": -0.05,
-          "direction": "down",
-          "analysis": "USD/CNY at 6.8237 (-0.05%) reflects modest yuan appreciation — a deliberate PBOC signal of stability management. At 6.82, the yuan is in the managed band the PBOC has tacitly defended, balancing export competitiveness (which favors a weaker yuan) against capital flow stability (which favors a stronger yuan). The slight appreciation bias today, despite Chinese equity weakness, likely reflects PBOC daily fixing policy designed to prevent speculative one-way positioning. Any move toward 7.00 would signal a significant deterioration in China's capital account dynamics and would be read by EM investors as a risk-off signal across Asian currencies.",
-          "support": "6.7500",
-          "resistance": "6.9000"
+          "value": "6.8347",
+          "change": "+0.13%",
+          "change_num": 0.13,
+          "direction": "up",
+          "analysis": "USD/CNY's +0.13% rise to 6.8347 — the largest daily percentage move in today's FX data — reflects steady yuan depreciation pressure that the PBOC is managing but not fully resisting. The combination of weak Chinese equity performance (Shanghai -0.65%), capital outflow risk evidenced by Hang Seng's -2.56% weekly loss, and structural USD strength creates a persistent bid for USD/CNY. The PBOC's daily fix mechanism limits the pace of depreciation, but a move toward 6.90 or above would begin to attract negative attention from US policymakers and reignite trade war rhetoric at a politically sensitive time.",
+          "support": "6.8000",
+          "resistance": "6.8800"
         }
       ]
     },
     "section6_commodities": {
       "title": "Commodities & Alternative Assets",
-      "narrative": "Thursday's commodity session was dominated by an extraordinary crude oil surge that demands immediate attention. Brent crude rocketed +10.22% to $102.39/bbl while WTI added +4.84% to $93.57/bbl — the asymmetric magnitude of these moves is analytically significant. A +10.22% single-session gain in Brent of this scale is historically associated with acute supply disruption events: OPEC+ emergency production cuts, pipeline infrastructure attacks, or sudden sanctions escalation on major exporters. The WTI/Brent spread widening (WTI underperforming Brent by approximately 5 percentage points in a single day) reinforces the supply disruption hypothesis, as Brent-referenced seaborne crude would be disproportionately impacted by Middle East or North African supply interruptions. Against this backdrop, gold's -0.73% decline to $4,742/oz is counterintuitive — if the crude surge reflected geopolitical risk, gold should be rallying, not selling off, which suggests the gold decline may be driven by profit-taking or margin call liquidation. Copper's +0.71% gain to $6.086/lb aligns with the materials sector's +1.43% outperformance and reflects China demand optimism on the margin. Agricultural commodities (wheat -0.61%, corn -0.38%, soybeans -1.67%) are notably weak, suggesting demand-side concerns or favorable weather outlook are offsetting any energy-cost transmission to fertilizer prices. The commodity complex as a whole today sends a stagflationary signal: energy costs are spiking while agricultural prices — a proxy for broader food inflation — are retreating, creating a mixed read for CPI trajectory.",
+      "narrative": "Friday's commodity session was dominated by a powerful crude oil surge that is beginning to fracture the commodity complex's internal coherence. WTI's +2.91% jump to $97.30 and Brent's +3.17% surge to $106.70 are moves of sufficient magnitude to demand attention across all asset classes simultaneously: they re-introduce stagflation premium into equity discount rates, apply upward pressure to long-end Treasury yields, and support energy sector equities (XLE +0.78%) while undermining consumer discretionary names (XLY -0.75%). The crude move appears supply-driven rather than demand-driven given the simultaneous weakness in copper (-0.23% to $6.018/lb) — a demand-sensitive industrial metal whose softness signals that the global manufacturing cycle is not accelerating in a way that would organically justify higher energy prices. Gold at $4,711.10 (-0.19%) continues to trade at extraordinary levels by historical standards, and its mild decline today is best interpreted as profit-taking or mild safe-haven deflation as the VIX remains below 20 — not as a reversal of the underlying structural bid for monetary alternatives. Silver's steeper -0.99% to $75.32 reflects its industrial demand component (similar to copper) underperforming its monetary component. Wheat's +1.51% to 620.5¢/bu adds an agricultural inflation dimension to the commodity complex that, combined with energy prices, creates a genuine consumer cost-of-living pressure that the FRED CPI index reading of 330.293 is beginning to reflect.",
       "items": [
         {
           "name": "Gold",
-          "value": "4742.0",
+          "value": "4711.1",
           "unit": "$/oz",
-          "change": "-0.73%",
-          "change_num": -0.73,
+          "change": "-0.19%",
+          "change_num": -0.19,
           "direction": "down",
-          "analysis": "Gold's -0.73% decline to $4,742.0/oz is puzzling in a session featuring a +10.22% Brent surge and geopolitical uncertainty. At these levels, gold at $4,742 remains in a historically elevated range, suggesting secular demand from central banks and EM sovereign reserve diversification continues. The dip today is likely technical profit-taking after a strong multi-week run, potentially compounded by real yield stability — with the 10-year at 4.294% and inflation expectations elevated, real yields remain modestly positive, limiting gold's pure safe-haven premium."
+          "analysis": "Gold's -0.19% dip to $4,711.10 is a minor consolidation within a structurally bullish regime driven by central bank accumulation, de-dollarization trends, and persistent inflation risk. The mild decline today likely reflects the modest DXY firmness (+0.09%) creating a marginal headwind, and profit-taking ahead of the weekend with the VIX below the panic threshold. The GLD ETF's -0.73% decline to $431.04 is slightly larger than the spot move, suggesting some ETF-specific redemption pressure. At these levels, gold remains one of the clearest beneficiaries of fiscal profligacy and monetary uncertainty regardless of daily noise."
         },
         {
           "name": "WTI Crude",
-          "value": "93.57",
+          "value": "97.3",
           "unit": "$/bbl",
-          "change": "+4.84%",
-          "change_num": 4.84,
+          "change": "+2.91%",
+          "change_num": 2.91,
           "direction": "up",
-          "analysis": "WTI's +4.84% surge to $93.57/bbl is a major market event, pushing US benchmark crude back toward the $95 resistance level that has historically signaled demand destruction risk. At $93.57, WTI is pricing in a meaningful supply tightening, likely driven by OPEC+ compliance or a geopolitical supply interruption. The inflationary implications for the US economy are direct: gasoline prices at the pump typically follow WTI with a 2-3 week lag, and a sustained print above $95 would materially complicate the Fed's inflation trajectory."
+          "analysis": "WTI's +2.91% surge to $97.30 is the single most market-moving data point of today's session. The move re-introduces stagflationary overtones — rising energy costs simultaneously compress consumer spending power, lift long-end yields, and hurt equity duration. Whether driven by geopolitical supply risk, OPEC+ discipline, or speculative positioning, crude's re-approach toward the $100 threshold is an unambiguously negative signal for global growth ex-energy-producers. The XLE's +0.78% daily gain shows the equity market is at least partially rewarding the energy sector directly."
         },
         {
           "name": "Brent Crude",
-          "value": "102.39",
+          "value": "106.7",
           "unit": "$/bbl",
-          "change": "+10.22%",
-          "change_num": 10.22,
+          "change": "+3.17%",
+          "change_num": 3.17,
           "direction": "up",
-          "analysis": "Brent's +10.22% surge to $102.39/bbl is the single most important market event of the day. A double-digit percentage gain in the global oil benchmark in a single session is an extreme tail event — the last comparable moves occurred during the 2022 Russia-Ukraine escalation and the 2020 OPEC+ supply war. At $102.39, Brent crosses the $100 psychological threshold, a level that has historically marked the boundary between 'elevated' and 'problematic' for global growth. European economies, which are more energy-import dependent, face the sharpest GDP headwind from this level, explaining the underperformance of CAC 40 and EuroStoxx 50 today."
+          "analysis": "Brent's +3.17% surge to $106.70 — already well above the $100 psychological level — confirms the global nature of the crude supply shock and will be felt most acutely in energy-import-dependent economies such as Germany, Japan, and China. The Brent-WTI spread at approximately $9.40 reflects typical quality and logistics differentials. European and Asian refiners will face meaningful margin compression if Brent sustains above $105 through Q2 earnings, adding another layer of pressure to already-fragile European industrial PMIs."
         },
         {
           "name": "Natural Gas",
-          "value": "2.718",
+          "value": "2.728",
           "unit": "$/MMBtu",
-          "change": "+0.15%",
-          "change_num": 0.15,
+          "change": "+0.26%",
+          "change_num": 0.26,
           "direction": "up",
-          "analysis": "Natural gas at $2.718/MMBtu (+0.15%) is notable for what it is NOT doing: despite Brent's extraordinary surge, US natural gas prices remain historically depressed, reflecting an ongoing domestic supply glut from Permian Basin associated gas production. This divergence between crude and natural gas reinforces the theory that today's crude move is supply-disruption driven (affecting seaborne oil specifically) rather than a broad energy demand shock. Low nat gas prices provide a partial offset to energy costs for US industrial consumers."
+          "analysis": "Natural gas at $2.728/MMBtu (+0.26%) remains structurally depressed relative to crude oil on a BTU-equivalent basis, reflecting ample US storage levels and mild weather patterns. The modest uptick aligns directionally with the crude surge but lacks the same momentum. European gas prices (not captured in this data) will be the more relevant metric for European industrial cost assessments, given EU dependence on LNG imports."
         },
         {
           "name": "Copper",
-          "value": "6.086",
+          "value": "6.018",
           "unit": "$/lb",
-          "change": "+0.71%",
-          "change_num": 0.71,
-          "direction": "up",
-          "analysis": "Copper's +0.71% advance to $6.086/lb is a constructive signal for global industrial demand — at this level, copper is pricing continued growth in electrification infrastructure, EV manufacturing, and Chinese construction activity. The materials sector ETF (XLB) gained +1.43% today, with copper providing fundamental support. Copper above $6/lb is also a real-time endorsement of the global growth narrative, pushing back against the European PMI deceleration signal."
+          "change": "-0.23%",
+          "change_num": -0.23,
+          "direction": "down",
+          "analysis": "Copper's -0.23% dip to $6.018/lb is the key internal commodity divergence signal today. As the most economically sensitive industrial metal — often termed 'Dr. Copper' for its ability to diagnose global growth — its mild decline alongside crude's surge confirms that the energy price move is supply-shock driven rather than demand-pull. This divergence is the strongest single indicator in today's data that stagflationary risk (supply-driven inflation with softening demand) rather than a genuine growth boom is the dominant macro regime."
         },
         {
           "name": "Silver",
-          "value": "77.19",
+          "value": "75.32",
           "unit": "$/oz",
-          "change": "-1.14%",
-          "change_num": -1.14,
+          "change": "-0.99%",
+          "change_num": -0.99,
           "direction": "down",
-          "analysis": "Silver's -1.14% decline to $77.19/oz mirrors gold's softness but with greater magnitude — silver's dual role as both a precious metal and an industrial commodity means it is susceptible to profit-taking when risk sentiment is mixed. The gold/silver ratio remains elevated at current levels, suggesting silver has not yet fully caught up to gold's extraordinary YTD run. A reversal and sustained rally in silver above $80/oz would be a strong confirming signal for both industrial demand growth and precious metal safe-haven appetite."
+          "analysis": "Silver's -0.99% decline to $75.32 reflects its dual nature as both a monetary metal and an industrial metal. With copper soft and industrial demand signals mixed, silver's industrial demand component is underperforming its monetary component today — a divergence from gold's smaller -0.19% decline. The gold/silver ratio widening on a day like this is typical of risk-off episodes where monetary safe-haven demand is strong but industrial confidence is flagging."
         },
         {
           "name": "Wheat",
-          "value": "608.5",
+          "value": "620.5",
           "unit": "¢/bu",
-          "change": "-0.61%",
-          "change_num": -0.61,
-          "direction": "down",
-          "analysis": "Wheat's -0.61% decline to 608.5¢/bu is noteworthy given the inflationary pressures present elsewhere in commodities. Favorable Northern Hemisphere planting conditions and expectations of adequate global supply are the most likely drivers of the weakness. However, if the geopolitical tensions implied by today's Brent surge involve Black Sea shipping routes, the wheat complex could reverse sharply — this is a tail risk worth monitoring closely in the coming sessions."
+          "change": "+1.51%",
+          "change_num": 1.51,
+          "direction": "up",
+          "analysis": "Wheat's +1.51% gain to 620.5¢/bu adds a meaningful agricultural inflation component to today's commodity complex. Combined with crude oil's surge, rising food and energy costs represent the two most politically sensitive categories of consumer price inflation. This combination places the Fed in an increasingly difficult position: supply-driven inflation in these categories is not addressable through monetary policy without imposing significant demand destruction through higher interest rates — a policy dilemma that the market appears to be slowly beginning to price."
         }
       ]
     },
     "section7_positioning": {
       "title": "Market Positioning & Sentiment",
-      "narrative": "Positioning and sentiment signals today present a nuanced picture that defies easy characterization. The VIX at 18.92 (market price) and FRED's most recent VIX reading of 19.5 bracket a range that is elevated relative to the sub-15 complacency levels of late 2024, yet well below the panic territory above 30 that characterized the worst stress episodes. The VIX's +30.39% YTD gain tells the real story: 2026 has been a year of persistently elevated option premiums despite intermittent equity rallies, reflecting institutional uncertainty about the macro regime. This is not a complacent market. ETF flow signals reinforce this cautious-optimistic duality. TLT (long bonds) at $86.74 (+0.01%) shows near-zero flows — bond investors are neither fleeing duration risk nor embracing it, preferring to sit on the sidelines ahead of potentially disruptive inflation data. GLD at $435.26 (+0.04%) similarly shows minimal positioning change despite the geopolitical energy shock — an absence of gold buying in the face of a +10.22% Brent surge is either a sign that gold's prior run has exhausted marginal buyers, or that investors are unconvinced today's crude move is durable. HYG at $80.50 (+0.06%) and LQD at $109.82 (+0.19%) confirm credit spreads remain well-behaved: high-yield and investment-grade bonds both attracted modest buying, suggesting the credit cycle is still investor-friendly. EEM's +1.25% gain shows that emerging market equities are outperforming developed international on the day, likely driven by commodity-exporting EM economies benefiting from the energy surge. ARKK's +1.58% advance is the clearest risk-appetite signal: speculative growth names are attracting capital, consistent with a market that is conditionally bullish on innovation themes while remaining hedged on macro uncertainty. The overall positioning picture: professionally managed money is long tech, long commodities, cautiously neutral on credit, and actively hedged via elevated VIX option premiums — a portfolio construction posture consistent with 'late-cycle risk-managed longs' rather than outright risk-on or risk-off extremism."
+      "narrative": "The positioning and sentiment picture on Friday 24 April 2026 is one of late-cycle caution dressed in relative complacency — a combination that historically precedes rather than follows volatility spikes. The FRED VIX reading at 18.92 (as of April 22) combined with today's live reading of 19.31 (+2.12%) shows incremental fear accumulation rather than panic — the VIX's +33.08% YTD gain is the critical context: this is not a VIX at 19 following a period of calm, it is a VIX at 19 following a year that began near 14-15. The floor has risen, options markets are charging more for protection, and the term structure of VIX is likely exhibiting less backwardation (or more contango) than a year ago, signaling that structural hedging demand remains elevated. ETF flow analysis provides further granular insight: GLD's -0.73% decline versus spot gold's -0.19% implies ETF-specific selling pressure in gold, suggesting that systematic or retail momentum investors in GLD may be trimming positions even as institutional physical gold demand remains firm. TLT's -0.22% decline confirms that long-duration bond safe-haven demand is absent today — investors are not fleeing to government bonds, they are rotating within equities. The most alarming flow signal is ARKK's -3.20% crash to $76.50, representing speculative growth capital destruction that, if sustained, could pressure the broader NASDAQ 100 and create margin call cascades in retail-heavy portfolios. HYG at -0.22% and LQD at -0.36% provide a credit market sentiment check — the fact that investment grade is underperforming high yield today is unusual and may reflect duration sensitivity (LQD has higher average duration) rather than credit deterioration per se, but it warrants monitoring. EEM's -1.63% — the largest daily decline among broad ETFs — is a clear institutional vote of no-confidence in emerging market risk at current DXY levels and with China under growth pressure. Overall, the positioning picture is one of gradual but accelerating defensive repositioning that could become disorderly if next week's macro data disappoints or if crude oil sustains above $100 Brent."
     },
     "section8_email_intelligence": {
       "title": "Email Intelligence — Daily Market Watch",
-      "summary": "No emails were received in the last 24 hours under the 'Daily Market Watch' label. Accordingly, today's intelligence brief draws exclusively from verified quantitative market data and proprietary macro analysis. The absence of email-driven intelligence does not diminish the significance of today's market developments — the extraordinary Brent crude surge (+10.22%), the US technology sector's continued outperformance, and the divergence between US equity strength and European weakness are all material developments that require no additional primary source confirmation. Readers are advised to monitor newswire sources and proprietary intelligence channels for the specific catalyst behind today's crude oil move, as the supply disruption hypothesis remains unconfirmed by the data available at this time.",
+      "summary": "No emails were received in the last 24 hours under the 'Daily Market Watch' label. In the absence of proprietary email intelligence, today's brief relies exclusively on the verified market data provided. The absence of email-driven intelligence itself may be noteworthy on a Friday ahead of a weekend when geopolitical developments (particularly in energy-producing regions given crude's +2.91%/+3.17% surge) could materially shift Monday's opening positioning. Institutional subscribers and proprietary news feeds going quiet on a Friday afternoon with WTI near $97.30 and Brent at $106.70 is a pattern that sometimes precedes weekend event risk — market participants are advised to maintain tighter-than-usual stop levels heading into the weekend and to monitor any geopolitical developments in Middle Eastern oil-producing nations or OPEC+ communication channels that could gap crude prices at Sunday's electronic open.",
       "key_stories": [
         {
-          "title": "No email intelligence received in the last 24 hours",
-          "body": "The Daily Market Watch email label returned no messages in the prior 24-hour window. All analysis in this brief is derived from verified Python-calculated market data. Market participants should supplement this brief with real-time newswire monitoring, particularly regarding the causality behind Brent crude's +10.22% single-session surge.",
-          "relevance": "medium"
+          "title": "No Email Intelligence Available — Crude Oil Surge Demands Vigilance",
+          "body": "In the absence of proprietary email intelligence, the dominant news-driven catalyst demanding attention is the magnitude of today's crude oil surge (WTI +2.91% to $97.30, Brent +3.17% to $106.70). Supply-side shocks of this magnitude are typically preceded by geopolitical developments or OPEC+ production decisions that surface in newswires before market data confirms them. Any over-the-weekend OPEC+ output cut announcement or geopolitical escalation in major oil-producing regions would gap crude higher at Sunday's open, with immediate negative implications for equity futures, EM currencies, and long-duration bond prices.",
+          "relevance": "high"
         }
       ]
     },
     "section9_synthesis": {
       "title": "Daily Synthesis & Outlook",
-      "regime": "transition",
-      "global_view": "Thursday 23 April 2026 will be remembered as a session of profound cross-asset tension. The US equity market, led by the NASDAQ 100's +1.73% surge to 26,937.28 and the S&P 500's +1.05% advance to 7,137.9, is behaving as if the growth and earnings cycle remains intact and the Fed's 3.64% pause is the equilibrium policy rate that unlocks multiple expansion for technology. Simultaneously, Brent crude's +10.22% single-session surge to $102.39/bbl is sending a categorically different signal: either a severe supply disruption is underway, or speculative positioning in crude has reached a level where a short squeeze can produce historically rare single-session price action. Both cannot be simultaneously correct for the inflation outlook: if Brent above $100 is durable, the Fed's ability to remain on hold is compromised, and the technology multiples being celebrated today become the casualties of tomorrow's hawkish recalibration. The yield curve at +69.9bp (2s10s) is signaling normalcy, but the 30-year at 4.902% is uncomfortably close to the 5% threshold where institutional asset-liability managers face mechanistic selling constraints. The global equity divergence — US outperforming, Europe underperforming, Asia mixed — reflects a world where the US technology sector acts as an independent growth engine decoupled from the broader macroeconomic cycle, a narrative that has driven exceptional returns (NASDAQ +6.87% YTD, Russell 2000 +11.05% YTD) but that carries within it the seeds of violent rotation risk when the decoupling thesis breaks. Currency markets are not yet pricing this tension: the DXY at 98.593 (+0.20%) and EUR/USD at 1.1712 (+0.02%) are both remarkably stable, suggesting FX volatility is the lagging asset class that will ultimately be the transmission mechanism for whatever regime shift is developing in crude oil. The FRED macro data provides the fulcrum: at 3.64% fed funds, 4.3% unemployment, and CPI running at 330.293 (versus 327.460 prior), the US economy is in a state of imperfect but functional equilibrium. Today's energy shock is the most credible exogenous catalyst capable of disrupting that equilibrium in the direction of stagflation.",
-      "tomorrow_watch": "Friday 24 April 2026 presents three high-impact data releases that will set the tone for next week. First, at 06:00 London time, UK Retail Sales MoM is forecast at +0.2% versus the prior -0.4% — a beat would support GBP/USD above 1.35 and reduce BoE easing urgency, while a miss compounds the UK growth scare from today's soft PMI forecasts. Second, at 08:00 Frankfurt time, the German Ifo Business Climate survey is forecast at 85.5 versus the prior 86.4 — any downside surprise here would decisively confirm that European growth momentum is rolling over and would pressure DAX and EUR further. Third, tonight at 23:30 Tokyo time, Japan's Inflation Rate YoY (prior: 1.3%, no estimate published) will be critical for USD/JPY positioning — an upside surprise opens the door to BOJ hawkish signals and a potential sharp yen appreciation. Finally, market participants should monitor overnight newswire reporting for the specific supply disruption catalyst behind Brent's +10.22% surge, as the secondary-session follow-through in crude will be the dominant cross-asset pricing input for Friday's open.",
+      "regime": "stagflation",
+      "global_view": "Friday 24 April 2026 is best characterized as a day in which the market is beginning to price a stagflationary regime without yet fully committing to that thesis — a dangerous halfway house that creates positioning vulnerability in both directions. The dominant cross-asset signal is the simultaneous surge in crude oil (WTI +2.91% to $97.30, Brent +3.17% to $106.70), backup in long-end Treasury yields (10Y +2.9bp to 4.323%, 30Y +1.6bp to 4.918%), weakness in growth-sensitive equities (NASDAQ -0.57%, ARKK -3.20%), and outperformance of defensive/inflation-hedge sectors (Utilities +2.42%, Staples +1.76%). This constellation is the textbook fingerprint of a supply-side inflation shock rather than a demand-driven growth boom. The equity market's S&P 500 still sits at 7,108.4 (+3.64% YTD) and the NASDAQ 100 at 26,782.62 (+6.25% YTD) — levels that embed a significant degree of Goldilocks optimism that is now being challenged by the energy complex. Gold at $4,711.10 remains at stratospheric levels by historical standards, reflecting deep institutional skepticism about long-term dollar purchasing power and fiscal sustainability, and its mild -0.19% dip today should be read as temporary noise rather than trend reversal. The Nikkei 225's +14.88% YTD outperformance at 59,546.35 is a key global market anomaly that deserves scrutiny: it is almost entirely attributable to yen weakness (USD/JPY at 159.769) rather than fundamental earnings re-rating, creating a fragile construct that unwinds sharply upon any BOJ policy surprise. The US yield curve at +72.8bp (2s10s) nominally signals expansion, but the bear-steepening dynamic (long end rising while short end holds) is more consistent with an inflation risk premium being added than genuine growth expectations improving. Credit spreads at 2.84% provide the primary near-term circuit-breaker for systemic risk — as long as they remain below 3.25-3.50%, the current volatility is containable. VIX at 19.31 (+33.08% YTD) tells us that the options market has materially re-priced the cost of tail risk protection, suggesting institutional players are carrying hedges even as headline indices remain near highs. The most important interconnection to monitor is the feedback loop between crude oil, CPI, Fed rate expectations, and equity multiples — at current energy prices, the May PCE data (released in late June) could deliver a nasty upside inflation surprise that forces a complete re-pricing of rate cut timing from 2026 into 2027, with potentially significant valuation consequences for the S&P 500's current multiple.",
+      "tomorrow_watch": "On April 25, 2026, the primary market-moving events to monitor are: any weekend OPEC+ communications or geopolitical developments in oil-producing regions given crude's sharp Friday surge (Sunday electronic open risk is elevated); preliminary April US PMI data if scheduled (global manufacturing vs services divergence will be critical in assessing whether the copper weakness is signaling genuine demand slowing); any BOJ or Japanese Ministry of Finance commentary given USD/JPY testing 160.00 (intervention risk is at maximum near current levels); and European open reaction to Germany's Ifo Business Climate data released today (estimate 85.5 vs prior 86.4) — if the actual reading confirmed consensus or missed, DAX futures reaction at the European open will be the first clean test of sentiment. Additionally, any Fed officials scheduled to speak next week (particularly regarding the inflation and energy price dynamics) will be market-moving given the sensitivity of rate expectations to crude oil trajectory.",
       "strategy": [
         {
           "type": "Tactical",
-          "recommendation": "Reduce Industrials and Consumer Discretionary exposure on strength; add to Energy sector (XLE at $56.54) as the Brent supply disruption catalyst develops.",
-          "rationale": "Industrials (-0.90% today, XLI at $171.04) face a margin squeeze from rising energy input costs and slowing European demand that is visible in today's flash PMI deterioration. Consumer Discretionary (-0.37%, XLY at $118.93) is vulnerable to the same energy cost pass-through to household budgets. Conversely, the Energy sector (XLE +1.04% to $56.54) is structurally underowned relative to the magnitude of today's crude surge — if Brent sustains above $100, energy equities have meaningful additional upside.",
+          "recommendation": "Reduce technology and consumer discretionary exposure; increase Utilities and Consumer Staples allocation for the next 1-3 sessions.",
+          "rationale": "With XLK down -1.29% to $155.84 and ARKK crashing -3.20% to $76.50, growth-sector momentum has clearly broken on a daily basis. The sector rotation into XLU (+2.42% to $46.09) and XLP (+1.76% to $83.48) is being institutionally driven, not retail-speculative — this rotation has durability. With crude oil at $97.30 WTI / $106.70 Brent and 10Y yields rising to 4.323%, the discount rate environment is unfavorable for high-multiple growth stocks for at least the next week pending any energy price reversal.",
           "timeframe": "1-3 days",
-          "conviction": "medium"
+          "conviction": "high"
         },
         {
           "type": "Risk Watch",
-          "recommendation": "Monitor Brent crude price action at open for follow-through above $102.39; a sustained print above $100 triggers a reassessment of the Fed hold thesis and technology multiples.",
-          "rationale": "Today's +10.22% Brent surge to $102.39/bbl is the primary systemic risk in the current market configuration. If tomorrow's Asian and European crude trading sessions confirm the move rather than revert it, the inflation recalibration trade becomes inevitable: 10-year Treasury yields would push toward 4.50%+, NASDAQ multiples would compress, and the yield curve steepening would accelerate. The S&P 500 at 7,137.9 would face meaningful downside risk in a scenario where the Fed is forced to resume hiking — historical precedent suggests 10-15% correction potential from current levels if the inflation narrative fully re-ignites.",
-          "timeframe": "3-7 days",
+          "recommendation": "Monitor USD/JPY at 159.769 — any break above 160.00 or BOJ/MoF intervention signal is a global market tail risk requiring immediate position adjustment.",
+          "rationale": "USD/JPY at 159.769 is within 23 pips of the 160.00 threshold that has historically triggered BOJ/MoF intervention. The Nikkei 225's +14.88% YTD gain at 59,546.35 is almost entirely predicated on yen weakness — a sharp yen appreciation episode would simultaneously crash the Nikkei, unwind yen-funded carry trades globally, and create dislocations in US equities and EM debt markets. This is not a low-probability risk; it is a highly asymmetric tail that markets appear to be under-pricing given the current VIX level of 19.31.",
+          "timeframe": "1-7 days",
           "conviction": "high"
         },
         {
           "type": "Opportunity",
-          "recommendation": "Initiate a long position in FTSE 100 relative to CAC 40 as a commodity-exposure hedge within European equities.",
-          "rationale": "The FTSE 100 at 10,476.5 (-0.21% today, +5.28% YTD) materially outperformed the CAC 40 at 8,156.43 (-1.11% today, -0.47% YTD) — a divergence explained by the FTSE's higher weighting in energy majors and mining companies that directly benefit from today's commodity surge. If Brent sustains above $100 and copper holds above $6/lb, this FTSE/CAC relative trade has a structural fundamental tailwind: UK-listed energy and materials companies generate revenues in dollars and their costs are sterling-denominated, providing both commodity price leverage and a favorable currency mix. The 5.75% YTD performance gap between FTSE and CAC provides room for further relative appreciation.",
+          "recommendation": "Maintain or add to energy sector positions (XLE at $56.98) as a stagflation hedge, and consider long WTI crude exposure with a target toward $100-$102.",
+          "rationale": "WTI at $97.30 (+2.91%) and Brent at $106.70 (+3.17%) are exhibiting supply-shock characteristics that, in the context of OPEC+ discipline and geopolitical risk, have historically sustained for multiple weeks before reversing. The XLE ETF at $56.98 (+0.78%) is the cleanest equity expression of this theme. Additionally, with the US CPI index at 330.293 (rising from 327.460) and the Fed holding rates at 3.64%, real rates may need to decline further, which historically benefits commodity producers and energy equities. The position also serves as a natural portfolio hedge against the stagflationary scenario that today's cross-asset data is beginning to price.",
           "timeframe": "5-15 days",
           "conviction": "medium"
         }
@@ -381,284 +381,284 @@
     "market": {
       "indices": {
         "S&P 500": {
-          "price": 7137.9,
-          "chg_1d": 1.05,
-          "chg_week": 2.45,
-          "chg_ytd": 4.07
+          "price": 7108.4,
+          "chg_1d": -0.41,
+          "chg_week": 1.22,
+          "chg_ytd": 3.64
         },
         "NASDAQ 100": {
-          "price": 26937.28,
-          "chg_1d": 1.73,
-          "chg_week": 4.24,
-          "chg_ytd": 6.87
+          "price": 26782.62,
+          "chg_1d": -0.57,
+          "chg_week": 2.21,
+          "chg_ytd": 6.25
         },
         "Dow Jones": {
-          "price": 49490.03,
-          "chg_1d": 0.69,
-          "chg_week": 1.97,
-          "chg_ytd": 2.29
+          "price": 49310.32,
+          "chg_1d": -0.36,
+          "chg_week": 1.75,
+          "chg_ytd": 1.92
         },
         "Russell 2000": {
-          "price": 2785.38,
-          "chg_1d": 0.74,
-          "chg_week": 2.95,
-          "chg_ytd": 11.05
+          "price": 2775.1,
+          "chg_1d": -0.37,
+          "chg_week": 2.26,
+          "chg_ytd": 10.64
         },
         "VIX": {
-          "price": 18.92,
-          "chg_1d": -2.92,
-          "chg_week": 3.05,
-          "chg_ytd": 30.39
+          "price": 19.31,
+          "chg_1d": 2.12,
+          "chg_week": 6.27,
+          "chg_ytd": 33.08
         },
         "CAC 40": {
-          "price": 8156.43,
-          "chg_1d": -1.11,
-          "chg_week": -2.06,
-          "chg_ytd": -0.47
+          "price": 8227.32,
+          "chg_1d": 0.75,
+          "chg_week": -0.57,
+          "chg_ytd": 0.39
         },
         "DAX": {
-          "price": 24194.9,
-          "chg_1d": -0.31,
-          "chg_week": 0.63,
-          "chg_ytd": -1.4
+          "price": 24155.45,
+          "chg_1d": -0.16,
+          "chg_week": 0.37,
+          "chg_ytd": -1.56
         },
         "FTSE 100": {
-          "price": 10476.5,
-          "chg_1d": -0.21,
-          "chg_week": -1.25,
-          "chg_ytd": 5.28
+          "price": 10457.0,
+          "chg_1d": -0.19,
+          "chg_week": -0.97,
+          "chg_ytd": 5.08
         },
         "EuroStoxx 50": {
-          "price": 5906.22,
-          "chg_1d": -0.54,
-          "chg_week": -1.31,
-          "chg_ytd": -0.29
+          "price": 5894.73,
+          "chg_1d": -0.27,
+          "chg_week": -0.77,
+          "chg_ytd": -0.49
         },
         "Nikkei 225": {
-          "price": 59331.37,
-          "chg_1d": -0.4,
-          "chg_week": 2.06,
-          "chg_ytd": 14.47
+          "price": 59546.35,
+          "chg_1d": 0.63,
+          "chg_week": 0.05,
+          "chg_ytd": 14.88
         },
         "Hang Seng": {
-          "price": 25896.13,
-          "chg_1d": -1.02,
-          "chg_week": -0.2,
-          "chg_ytd": -1.68
+          "price": 25718.41,
+          "chg_1d": -0.76,
+          "chg_week": -2.56,
+          "chg_ytd": -2.35
         },
         "Shanghai": {
-          "price": 4097.33,
-          "chg_1d": -0.22,
-          "chg_week": 1.74,
-          "chg_ytd": 1.84
+          "price": 4068.05,
+          "chg_1d": -0.65,
+          "chg_week": 0.31,
+          "chg_ytd": 1.11
         }
       },
       "sectors": {
         "Technology": {
           "ticker": "XLK",
-          "price": 158.09,
-          "chg_1d": 1.54
+          "price": 155.84,
+          "chg_1d": -1.29
         },
         "Financials": {
           "ticker": "XLF",
-          "price": 52.21,
-          "chg_1d": -0.55
+          "price": 51.8,
+          "chg_1d": -0.79
         },
         "Energy": {
           "ticker": "XLE",
-          "price": 56.54,
-          "chg_1d": 1.04
+          "price": 56.98,
+          "chg_1d": 0.78
         },
         "Healthcare": {
           "ticker": "XLV",
-          "price": 146.38,
-          "chg_1d": -0.14
+          "price": 146.24,
+          "chg_1d": -0.23
         },
         "Industrials": {
           "ticker": "XLI",
-          "price": 171.04,
-          "chg_1d": -0.9
+          "price": 174.07,
+          "chg_1d": 1.62
         },
         "Consumer Discr.": {
           "ticker": "XLY",
-          "price": 118.93,
-          "chg_1d": -0.37
+          "price": 117.74,
+          "chg_1d": -0.75
         },
         "Materials": {
           "ticker": "XLB",
-          "price": 51.83,
-          "chg_1d": 1.43
+          "price": 51.81,
+          "chg_1d": -0.15
         },
         "Utilities": {
           "ticker": "XLU",
-          "price": 44.87,
-          "chg_1d": -0.36
+          "price": 46.09,
+          "chg_1d": 2.42
         },
         "Real Estate": {
           "ticker": "XLRE",
-          "price": 43.46,
-          "chg_1d": -0.59
+          "price": 43.96,
+          "chg_1d": 1.06
         },
         "Comm. Services": {
           "ticker": "XLC",
-          "price": 117.88,
-          "chg_1d": 0.25
+          "price": 117.39,
+          "chg_1d": -0.52
         },
         "Cons. Staples": {
           "ticker": "XLP",
-          "price": 82.11,
-          "chg_1d": 0.13
+          "price": 83.48,
+          "chg_1d": 1.76
         }
       },
       "fx": {
         "EUR/USD": {
-          "price": 1.1712,
-          "chg_1d": 0.02
+          "price": 1.1692,
+          "chg_1d": 0.03
         },
         "GBP/USD": {
-          "price": 1.3499,
-          "chg_1d": -0.02
+          "price": 1.3472,
+          "chg_1d": 0.03
         },
         "USD/JPY": {
-          "price": 159.416,
-          "chg_1d": -0.04
+          "price": 159.769,
+          "chg_1d": 0.05
         },
         "USD/CHF": {
-          "price": 0.7846,
-          "chg_1d": 0.01
+          "price": 0.7862,
+          "chg_1d": 0.0
         },
         "AUD/USD": {
-          "price": 0.7157,
+          "price": 0.7131,
           "chg_1d": -0.03
         },
         "USD/CNY": {
-          "price": 6.8237,
-          "chg_1d": -0.05
+          "price": 6.8347,
+          "chg_1d": 0.13
         },
         "USD/BRL": {
-          "price": 4.9645,
-          "chg_1d": -0.04
+          "price": 5.0245,
+          "chg_1d": 0.0
         },
         "USD/MXN": {
-          "price": 17.3383,
-          "chg_1d": -0.0
+          "price": 17.4168,
+          "chg_1d": 0.03
         },
         "USD/CAD": {
-          "price": 1.3667,
+          "price": 1.3698,
           "chg_1d": 0.01
         },
         "DXY": {
-          "price": 98.593,
-          "chg_1d": 0.2
+          "price": 98.802,
+          "chg_1d": 0.09
         }
       },
       "commodities": {
         "Gold": {
-          "price": 4742.0,
+          "price": 4711.1,
           "unit": "$/oz",
-          "chg_1d": -0.73
+          "chg_1d": -0.19
         },
         "Silver": {
-          "price": 77.19,
+          "price": 75.32,
           "unit": "$/oz",
-          "chg_1d": -1.14
+          "chg_1d": -0.99
         },
         "WTI Crude": {
-          "price": 93.57,
+          "price": 97.3,
           "unit": "$/bbl",
-          "chg_1d": 4.84
+          "chg_1d": 2.91
         },
         "Brent Crude": {
-          "price": 102.39,
+          "price": 106.7,
           "unit": "$/bbl",
-          "chg_1d": 10.22
+          "chg_1d": 3.17
         },
         "Natural Gas": {
-          "price": 2.718,
+          "price": 2.728,
           "unit": "$/MMBtu",
-          "chg_1d": 0.15
+          "chg_1d": 0.26
         },
         "Copper": {
-          "price": 6.086,
+          "price": 6.018,
           "unit": "$/lb",
-          "chg_1d": 0.71
+          "chg_1d": -0.23
         },
         "Wheat": {
-          "price": 608.5,
+          "price": 620.5,
           "unit": "¢/bu",
-          "chg_1d": -0.61
+          "chg_1d": 1.51
         },
         "Corn": {
-          "price": 462.0,
+          "price": 464.0,
           "unit": "¢/bu",
-          "chg_1d": -0.38
+          "chg_1d": 0.27
         },
         "Soybeans": {
-          "price": 1179.0,
+          "price": 1174.5,
           "unit": "¢/bu",
-          "chg_1d": -1.67
+          "chg_1d": -0.53
         }
       },
       "bonds": {
         "US 2Y": {
           "yield_pct": 3.595,
-          "chg_bp": -0.3
+          "chg_bp": 0.0
         },
         "US 10Y": {
-          "yield_pct": 4.294,
-          "chg_bp": 0.2
+          "yield_pct": 4.323,
+          "chg_bp": 2.9
         },
         "US 30Y": {
-          "yield_pct": 4.902,
-          "chg_bp": 0.4
+          "yield_pct": 4.918,
+          "chg_bp": 1.6
         },
-        "spread_2s10s_bp": 69.9
+        "spread_2s10s_bp": 72.8
       },
       "etfs": {
         "SPY": {
           "label": "S&P 500",
-          "price": 711.21,
-          "chg_1d": 0.6
+          "price": 708.45,
+          "chg_1d": -0.28
         },
         "QQQ": {
           "label": "NASDAQ 100",
-          "price": 655.11,
-          "chg_1d": 1.18
+          "price": 651.42,
+          "chg_1d": -0.62
         },
         "IWM": {
           "label": "Russell 2000",
-          "price": 276.48,
-          "chg_1d": 0.08
+          "price": 275.52,
+          "chg_1d": -0.17
         },
         "GLD": {
           "label": "Gold",
-          "price": 435.26,
-          "chg_1d": 0.04
+          "price": 431.04,
+          "chg_1d": -0.73
         },
         "TLT": {
           "label": "Long Bond",
-          "price": 86.74,
-          "chg_1d": 0.01
+          "price": 86.55,
+          "chg_1d": -0.22
         },
         "HYG": {
           "label": "High Yield",
-          "price": 80.5,
-          "chg_1d": 0.06
+          "price": 80.37,
+          "chg_1d": -0.22
         },
         "LQD": {
           "label": "Inv.Grade",
-          "price": 109.82,
-          "chg_1d": 0.19
+          "price": 109.52,
+          "chg_1d": -0.36
         },
         "EEM": {
           "label": "EM Equities",
-          "price": 63.38,
-          "chg_1d": 1.25
+          "price": 62.35,
+          "chg_1d": -1.63
         },
         "ARKK": {
           "label": "Innovation",
-          "price": 79.3,
-          "chg_1d": 1.58
+          "price": 76.5,
+          "chg_1d": -3.2
         }
       }
     },
@@ -680,23 +680,23 @@
       },
       "10y_treasury": {
         "value": "4.3",
-        "date": "2026-04-21",
-        "prev": "4.26"
+        "date": "2026-04-22",
+        "prev": "4.3"
       },
       "2y_treasury": {
-        "value": "3.78",
-        "date": "2026-04-21",
-        "prev": "3.72"
+        "value": "3.79",
+        "date": "2026-04-22",
+        "prev": "3.78"
       },
       "credit_spreads": {
-        "value": "2.85",
-        "date": "2026-04-21",
-        "prev": "2.87"
+        "value": "2.84",
+        "date": "2026-04-22",
+        "prev": "2.85"
       },
       "vix": {
-        "value": "19.5",
-        "date": "2026-04-21",
-        "prev": "18.87"
+        "value": "18.92",
+        "date": "2026-04-22",
+        "prev": "19.5"
       },
       "m2": {
         "value": "22667.3",
@@ -705,46 +705,6 @@
       }
     },
     "economic_calendar": [
-      {
-        "actual": null,
-        "country": "DE",
-        "estimate": 51.3,
-        "event": "S&P Global Manufacturing PMI Flash",
-        "impact": "high",
-        "prev": 52.2,
-        "time": "2026-04-23 07:30:00",
-        "unit": ""
-      },
-      {
-        "actual": null,
-        "country": "GB",
-        "estimate": 49.9,
-        "event": "S&P Global Manufacturing PMI Flash",
-        "impact": "high",
-        "prev": 51,
-        "time": "2026-04-23 08:30:00",
-        "unit": ""
-      },
-      {
-        "actual": null,
-        "country": "GB",
-        "estimate": 50,
-        "event": "S&P Global Services PMI Flash",
-        "impact": "high",
-        "prev": 50.5,
-        "time": "2026-04-23 08:30:00",
-        "unit": ""
-      },
-      {
-        "actual": null,
-        "country": "JP",
-        "estimate": null,
-        "event": "Inflation Rate YoY",
-        "impact": "high",
-        "prev": 1.3,
-        "time": "2026-04-23 23:30:00",
-        "unit": "%"
-      },
       {
         "actual": null,
         "country": "GB",
@@ -767,5 +727,5 @@
       }
     ]
   },
-  "generated": "2026-04-23T02:04:04.721515+00:00"
+  "generated": "2026-04-24T02:04:40.369887+00:00"
 }
